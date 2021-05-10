@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 282718454647342875, guid: bbfa46ccddaf14146ad4cfcf45214888, type: 3}
-  m_DetectionMode: -1
+  m_DetectionMode: 1
 --- !u!114 &101794943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,7 +382,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0cefc717cf48d4f95e334beae8d857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstantiate: {fileID: 100000, guid: 9476191048edd4cd1a78015d5f750aca, type: 3}
+  gameObjectToInstantiate: {fileID: 1070877205425658, guid: 3a66a51b61f1741fb97d208ff033f09c, type: 3}
+  pianoObjectToInstantiate: {fileID: 1608496434627626, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
+  drumObjectToInstantiate: {fileID: 1580105072307210, guid: b70de8949248542a9ba7ac184b6542f5, type: 3}
+  bassObjectToInstantiate: {fileID: 1726839335285724, guid: 5e0cb889e94184e8ba33cf9bbac62a65, type: 3}
+  vocalObjectToInstantiate: {fileID: 1463338417053554, guid: caa3003c1d9bd4538918a4d606a97a73, type: 3}
+  miscObjectToInstantiate: {fileID: 1132283312081500, guid: 4f3dc17a36a674292af8d61f4d60149c, type: 3}
+  buttonManagerScript: {fileID: 964670527}
 --- !u!114 &101794944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -940,7 +946,6 @@ GameObject:
   - component: {fileID: 245872545}
   - component: {fileID: 245872544}
   - component: {fileID: 245872543}
-  - component: {fileID: 245872547}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1020,8 +1025,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1202215424}
   - {fileID: 1525436234}
+  - {fileID: 1202215424}
   - {fileID: 863450046}
   - {fileID: 632634186}
   - {fileID: 2048651069}
@@ -1034,18 +1039,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &245872547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 245872542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9e714877afa69c41aee5cd5035812d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &248178644
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,7 +1245,7 @@ GameObject:
   - component: {fileID: 632634188}
   - component: {fileID: 632634187}
   m_Layer: 5
-  m_Name: Button4
+  m_Name: Button_Vocal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1384,7 +1377,7 @@ GameObject:
   - component: {fileID: 863450048}
   - component: {fileID: 863450047}
   m_Layer: 5
-  m_Name: Button3
+  m_Name: Button_Bass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1671,6 +1664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c2ab382ef84dd48b67e1f25e92693a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedInstrument: 
 --- !u!4 &964670528
 Transform:
   m_ObjectHideFlags: 0
@@ -1907,7 +1901,7 @@ GameObject:
   - component: {fileID: 1202215426}
   - component: {fileID: 1202215425}
   m_Layer: 5
-  m_Name: Button1
+  m_Name: Button_Drum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1925,7 +1919,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 245872546}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -2114,7 +2108,7 @@ GameObject:
   - component: {fileID: 1525436236}
   - component: {fileID: 1525436235}
   m_Layer: 5
-  m_Name: Button2
+  m_Name: Button_Piano
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2132,7 +2126,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 245872546}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -2567,7 +2561,7 @@ GameObject:
   - component: {fileID: 2048651071}
   - component: {fileID: 2048651070}
   m_Layer: 5
-  m_Name: Button5
+  m_Name: Button_Misc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

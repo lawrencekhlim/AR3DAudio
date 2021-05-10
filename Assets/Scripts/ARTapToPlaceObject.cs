@@ -11,15 +11,36 @@ public class ARTapToPlaceObject : MonoBehaviour
 {
 
     public GameObject gameObjectToInstantiate;
-    
+
+    public GameObject pianoObjectToInstantiate;
+    public GameObject drumObjectToInstantiate;
+    public GameObject bassObjectToInstantiate;
+    public GameObject vocalObjectToInstantiate;
+    public GameObject miscObjectToInstantiate;
+
+    private Dictionary<string, GameObject> spawnedObjects =
+        new Dictionary<string, GameObject>(){
+            {"Piano", null},
+            {"Drum", null},
+            {"Bass", null},
+            {"Vocal", null},
+            {"Misc", null},
+        };
+
+    //public string instrument = "Piano";
+    public ButtonManager buttonManagerScript;
+
+
+
+
     private GameObject spawnedObject;
     
     private ARRaycastManager _arRaycastManager;
     
     private Vector2 touchPosition;
     
-    
     static List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
 
     void Awake()
     {
@@ -30,11 +51,31 @@ public class ARTapToPlaceObject : MonoBehaviour
     bool TryGetTouchPosition (out Vector2 touchPosition)
     {
         if (Input.touchCount > 0) {
-            touchPosition = Input.GetTouch (0).position;
+            touchPosition = Input.GetTouch(0).position;
+            Debug.Log("I sense a touch");
             return true;
         }
         touchPosition = default;
         return false;
+    }
+
+    GameObject getObjectToInstantiate(string instrument_name)
+    {
+        switch (instrument_name)
+        {
+            case "Piano":
+                return pianoObjectToInstantiate;
+            case "Drum":
+                return drumObjectToInstantiate;
+            case "Bass":
+                return bassObjectToInstantiate;
+            case "Vocal":
+                return vocalObjectToInstantiate;
+            case "Misc":
+                return miscObjectToInstantiate;
+            default:
+                return null;
+        }
     }
 
 
@@ -43,8 +84,8 @@ public class ARTapToPlaceObject : MonoBehaviour
     {
         if (!TryGetTouchPosition(out Vector2 touchPosition))
             return;
-        
-        if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon)) {
+
+        /*if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon)) {
             var hitPose = hits[0].pose;
             
             if (spawnedObject == null) {
@@ -55,6 +96,26 @@ public class ARTapToPlaceObject : MonoBehaviour
                 spawnedObject.transform.position = hitPose.position;
             }
         
+        }*/
+
+        if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
+        {
+            var hitPose = hits[0].pose;
+
+
+            string instrument = buttonManagerScript.selectedInstrument;
+            if (instrument == null)
+                return;
+
+            if (spawnedObjects[instrument] == null)
+            {
+                spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
+            }
+            else
+            {
+                spawnedObjects[instrument].transform.position = hitPose.position;
+            }
+
         }
     }
 }
