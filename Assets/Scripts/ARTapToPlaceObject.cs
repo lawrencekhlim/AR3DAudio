@@ -52,7 +52,14 @@ public class ARTapToPlaceObject : MonoBehaviour
     {
         if (Input.touchCount > 0) {
             touchPosition = Input.GetTouch(0).position;
+
+            if(touchPosition.y > Screen.height * 0.9 || touchPosition.y < Screen.height*0.1){
+                touchPosition = default;
+                return false;
+            }
+
             Debug.Log("I sense a touch");
+            Debug.Log(touchPosition);
             return true;
         }
         touchPosition = default;
