@@ -90,7 +90,23 @@ public class ARTapToPlaceObject : MonoBehaviour
     void Update()
     {
         if (!TryGetTouchPosition(out Vector2 touchPosition))
+        {
+            if(buttonManagerScript.delete == 1)
+            {
+                Debug.Log("About to delete");
+                string instrument = buttonManagerScript.selectedInstrument;
+                if (instrument == null)
+                    return;
+
+                if (spawnedObjects[instrument] != null)
+                {
+                    Destroy(spawnedObjects[instrument]);
+                    spawnedObjects[instrument] = null;
+                }
+                buttonManagerScript.delete = 0;
+            }
             return;
+        }
 
         /*if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon)) {
             var hitPose = hits[0].pose;

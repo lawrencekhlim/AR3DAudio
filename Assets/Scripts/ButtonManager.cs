@@ -10,6 +10,7 @@ public class ButtonManager : MonoBehaviour
     private bool isClicked = false;
     public string selectedInstrument = null;
     private GameObject selectedObject = null;
+    public int delete = 0;
 
 
     public void Hello()
@@ -23,36 +24,48 @@ public class ButtonManager : MonoBehaviour
         {
             if (EventSystem.current.currentSelectedGameObject != null)
             {
-                // make previously selected object white. Then replace it with new currently selected object
-                if (selectedObject != null)
+                Debug.Log(EventSystem.current.currentSelectedGameObject.ToString());
+                if(EventSystem.current.currentSelectedGameObject.ToString().Contains("Delete"))
                 {
-                    selectedObject.GetComponent<Image>().color = Color.white;
-                }
-                GameObject newSelectedObject = EventSystem.current.currentSelectedGameObject;
-
-                if (selectedObject == newSelectedObject)
-                {
-                    selectedObject = null;
-                } 
-                else
-                {
-                    selectedObject = newSelectedObject;
-                    Color myColor = new Color();
-                    ColorUtility.TryParseHtmlString("#87b5ff", out myColor);
-                    selectedObject.GetComponent<Image>().color = myColor;
-                }
-
-                if (selectedObject)
-                {
-                    string[] name_split = selectedObject.name.Split('_');
-                    selectedInstrument = name_split[1];
+                    Debug.Log("Here in delete");
+                    if(selectedObject != null)
+                    {
+                        delete = 1;
+                    }
                 }
                 else
                 {
-                    selectedInstrument = null;
-                }
+                    // make previously selected object white. Then replace it with new currently selected object
+                    if (selectedObject != null)
+                    {
+                        selectedObject.GetComponent<Image>().color = Color.white;
+                    }
+                    GameObject newSelectedObject = EventSystem.current.currentSelectedGameObject;
 
-                Debug.Log(selectedInstrument);
+                    if (selectedObject == newSelectedObject)
+                    {
+                        selectedObject = null;
+                    } 
+                    else
+                    {
+                        selectedObject = newSelectedObject;
+                        Color myColor = new Color();
+                        ColorUtility.TryParseHtmlString("#87b5ff", out myColor);
+                        selectedObject.GetComponent<Image>().color = myColor;
+                    }
+
+                    if (selectedObject)
+                    {
+                        string[] name_split = selectedObject.name.Split('_');
+                        selectedInstrument = name_split[1];
+                    }
+                    else
+                    {
+                        selectedInstrument = null;
+                    }
+
+                    Debug.Log(selectedInstrument);
+                }
 
             }
             isClicked = false;
