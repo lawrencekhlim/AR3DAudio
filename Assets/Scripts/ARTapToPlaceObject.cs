@@ -29,8 +29,7 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     //public string instrument = "Piano";
     public ButtonManager buttonManagerScript;
-
-
+    public DropdownManager dropdownManagerScript;
 
 
     private GameObject spawnedObject;
@@ -93,7 +92,7 @@ public class ARTapToPlaceObject : MonoBehaviour
         {
             if(buttonManagerScript.delete == 1)
             {
-                Debug.Log("About to delete");
+                // Debug.Log("About to delete");
                 string instrument = buttonManagerScript.selectedInstrument;
                 if (instrument == null)
                     return;
@@ -133,6 +132,65 @@ public class ARTapToPlaceObject : MonoBehaviour
             if (spawnedObjects[instrument] == null)
             {
                 spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
+                //string tag;
+                Debug.Log(instrument);
+                Debug.Log(dropdownManagerScript.song);
+                var clip = Resources.Load(dropdownManagerScript.song) as AudioClip;
+                if(instrument.Contains("Vocal"))
+                {
+                    if(GameObject.FindGameObjectsWithTag("Instrument4").Length != 0)
+                    {
+                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument4").GetComponent<AudioSource>();
+                        Debug.Log(audio.ToString());
+                        audio.Pause();
+                        audio.clip = clip;
+                        audio.Play();
+                    }
+                }
+                else if(instrument.Contains("Bass"))
+                {
+                    if(GameObject.FindGameObjectsWithTag("Instrument1").Length != 0)
+                    {
+                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument1").GetComponent<AudioSource>();
+                        Debug.Log(audio.ToString());
+                        audio.Pause();
+                        audio.clip = clip;
+                        audio.Play();
+                    }
+                }
+                else if(instrument.Contains("Misc"))
+                {
+                    if(GameObject.FindGameObjectsWithTag("Instrument5").Length != 0)
+                    {
+                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument5").GetComponent<AudioSource>();
+                        Debug.Log(audio.ToString());
+                        audio.Pause();
+                        audio.clip = clip;
+                        audio.Play();
+                    }
+                }
+                else if(instrument.Contains("Drum"))
+                {
+                    if(GameObject.FindGameObjectsWithTag("Instrument3").Length != 0)
+                    {
+                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument3").GetComponent<AudioSource>();
+                        Debug.Log(audio.ToString());
+                        audio.Pause();
+                        audio.clip = clip;
+                        audio.Play();
+                    }
+                }
+                else if(instrument.Contains("Piano"))
+                {
+                    if(GameObject.FindGameObjectsWithTag("Instrument2").Length != 0)
+                    {
+                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument2").GetComponent<AudioSource>();
+                        Debug.Log(audio.ToString());
+                        audio.Pause();
+                        audio.clip = clip;
+                        audio.Play();
+                    }
+                }
             }
             else
             {

@@ -64,7 +64,7 @@ public class DropdownManager : MonoBehaviour
             song = "Road Tripzzz - Ofshane";
         }
         var clip = Resources.Load(song) as AudioClip;
-        Debug.Log(clip.ToString());
+        // Debug.Log(clip.ToString());
         if(GameObject.FindGameObjectsWithTag("Instrument1").Length != 0)
         {
             AudioSource audio1 = GameObject.FindGameObjectWithTag("Instrument1").GetComponent<AudioSource>();

@@ -24,10 +24,10 @@ public class ButtonManager : MonoBehaviour
         {
             if (EventSystem.current.currentSelectedGameObject != null)
             {
-                Debug.Log(EventSystem.current.currentSelectedGameObject.ToString());
+                // Debug.Log(EventSystem.current.currentSelectedGameObject.ToString());
                 if(EventSystem.current.currentSelectedGameObject.ToString().Contains("Delete"))
                 {
-                    Debug.Log("Here in delete");
+                    // Debug.Log("Here in delete");
                     if(selectedObject != null)
                     {
                         delete = 1;
