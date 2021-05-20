@@ -31,7 +31,6 @@ public class ARTapToPlaceObject : MonoBehaviour
     //public string instrument = "Piano";
     public ButtonManager buttonManagerScript;
     public DropdownManager dropdownManagerScript;
-    public GameObject testMeInstrument;
     private float instrumentPitch;
     AudioMixer pitchBendMixer;
 
