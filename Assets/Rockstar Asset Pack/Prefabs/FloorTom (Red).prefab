@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 7546476663379047457}
   m_Layer: 0
   m_Name: FloorTom (Red)
-  m_TagString: Instrument5
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
