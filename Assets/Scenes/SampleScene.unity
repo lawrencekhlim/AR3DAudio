@@ -389,8 +389,7 @@ MonoBehaviour:
   vocalObjectToInstantiate: {fileID: 1463338417053554, guid: caa3003c1d9bd4538918a4d606a97a73, type: 3}
   miscObjectToInstantiate: {fileID: 1132283312081500, guid: 4f3dc17a36a674292af8d61f4d60149c, type: 3}
   buttonManagerScript: {fileID: 964670527}
-  dropdownManagerScript: {fileID: 0}
-  testMeInstrument: {fileID: 739488109}
+  dropdownManagerScript: {fileID: 820241203}
 --- !u!114 &101794944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,67 +1342,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &450729414
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1608496434627626, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_Name
-      value: Stratocaster (Baby Blue)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4580698498125192, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7268971780811300928, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: 24300002, guid: 4a3e94481e1d36c40b4301fba1589ba4, type: 2}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
 --- !u!1 &561845947
 GameObject:
   m_ObjectHideFlags: 0
@@ -1572,11 +1510,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632634185}
   m_CullTransparentMesh: 1
---- !u!1 &739488109 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1608496434627626, guid: 9460cd49b555b4a8a8b3c61e4e753453, type: 3}
-  m_PrefabInstance: {fileID: 450729414}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &820241202
 GameObject:
   m_ObjectHideFlags: 0
