@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class DropdownManager : MonoBehaviour
 {
-    public string song = "Look Out) She's America - Otis McDonald";
+    public string song = "(Look Out) She's America - Otis McDonald";
+    //public AudioSeekManager audioSeekManager;
 
     public void Changed(int val)
     {
         Debug.Log(val);
+        AudioSeekManager.Instance.setSongPosition(0);
         // code below kind of works, needs try except in case instrument is not out, and clip seems to have issues
         // however, if all instruments are present it can pause all of them at once
         if(val == 0)

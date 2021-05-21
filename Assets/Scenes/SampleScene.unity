@@ -389,6 +389,8 @@ MonoBehaviour:
   vocalObjectToInstantiate: {fileID: 1463338417053554, guid: caa3003c1d9bd4538918a4d606a97a73, type: 3}
   miscObjectToInstantiate: {fileID: 1132283312081500, guid: 4f3dc17a36a674292af8d61f4d60149c, type: 3}
   buttonManagerScript: {fileID: 964670527}
+  dropdownManagerScript: {fileID: 820241203}
+  audioSeekManager: {fileID: 1174816543}
 --- !u!114 &101794944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1537,6 +1539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295f36dc0960243dd822275d0e77cd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  song: Look Out) She's America - Otis McDonald
 --- !u!4 &820241204
 Transform:
   m_ObjectHideFlags: 0
@@ -1885,8 +1888,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c2ab382ef84dd48b67e1f25e92693a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSeekManager: {fileID: 0}
   selectedInstrument: 
   delete: 0
+  play_pause_button_state: 1
 --- !u!4 &964670528
 Transform:
   m_ObjectHideFlags: 0
@@ -1900,6 +1905,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1174816542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1174816544}
+  - component: {fileID: 1174816543}
+  m_Layer: 0
+  m_Name: AudioSeekGameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1174816543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174816542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4e53485143b34dbfab2fcfaefe28e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentlyPlaying: 0
+  currentTime: 0
+  instrument_names:
+  - Instrument1
+  - Instrument2
+  - Instrument3
+  - Instrument4
+  - Instrument5
+--- !u!4 &1174816544
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174816542}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 764.41534, y: 384.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1187280463
 GameObject:
@@ -2387,7 +2443,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play/Pause
+  m_Text: Play
 --- !u!222 &1320729616
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2763,7 +2819,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1713784363}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 964670527}
+        m_TargetAssemblyTypeName: ButtonManager, Assembly-CSharp
+        m_MethodName: Hello
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1713784363
 MonoBehaviour:
   m_ObjectHideFlags: 0

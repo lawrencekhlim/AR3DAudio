@@ -18,7 +18,7 @@ public class ARTapToPlaceObject : MonoBehaviour
     public GameObject vocalObjectToInstantiate;
     public GameObject miscObjectToInstantiate;
 
-    private Dictionary<string, GameObject> spawnedObjects =
+    public Dictionary<string, GameObject> spawnedObjects =
         new Dictionary<string, GameObject>(){
             {"Piano", null},
             {"Drum", null},
@@ -27,7 +27,6 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Misc", null},
         };
 
-    //public string instrument = "Piano";
     public ButtonManager buttonManagerScript;
     public DropdownManager dropdownManagerScript;
 
@@ -144,7 +143,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                         Debug.Log(audio.ToString());
                         audio.Pause();
                         audio.clip = clip;
-                        audio.Play();
+                        AudioSeekManager.Instance.playSong();
                     }
                 }
                 else if(instrument.Contains("Bass"))
@@ -155,7 +154,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                         Debug.Log(audio.ToString());
                         audio.Pause();
                         audio.clip = clip;
-                        audio.Play();
+                        AudioSeekManager.Instance.playSong();
                     }
                 }
                 else if(instrument.Contains("Misc"))
@@ -166,7 +165,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                         Debug.Log(audio.ToString());
                         audio.Pause();
                         audio.clip = clip;
-                        audio.Play();
+                        AudioSeekManager.Instance.playSong();
                     }
                 }
                 else if(instrument.Contains("Drum"))
@@ -177,7 +176,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                         Debug.Log(audio.ToString());
                         audio.Pause();
                         audio.clip = clip;
-                        audio.Play();
+                        AudioSeekManager.Instance.playSong();
                     }
                 }
                 else if(instrument.Contains("Piano"))
@@ -188,7 +187,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                         Debug.Log(audio.ToString());
                         audio.Pause();
                         audio.clip = clip;
-                        audio.Play();
+                        AudioSeekManager.Instance.playSong();
                     }
                 }
             }

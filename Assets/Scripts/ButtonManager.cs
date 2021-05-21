@@ -11,8 +11,7 @@ public class ButtonManager : MonoBehaviour
     public string selectedInstrument = null;
     private GameObject selectedObject = null;
     public int delete = 0;
-
-
+    public int play_pause_button_state = 1; // 0 is showing pause (currently playing), 1 is showing play (currently paused)
     public void Hello()
     {
         isClicked = true;
@@ -24,13 +23,32 @@ public class ButtonManager : MonoBehaviour
         {
             if (EventSystem.current.currentSelectedGameObject != null)
             {
-                // Debug.Log(EventSystem.current.currentSelectedGameObject.ToString());
+                Debug.Log(EventSystem.current.currentSelectedGameObject.ToString());
+
                 if(EventSystem.current.currentSelectedGameObject.ToString().Contains("Delete"))
                 {
-                    // Debug.Log("Here in delete");
                     if(selectedObject != null)
                     {
                         delete = 1;
+                    }
+                }
+                else if(EventSystem.current.currentSelectedGameObject.ToString().Contains("Playpause"))
+                {
+                    isClicked = false;
+                    Debug.Log(EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text);
+                    if (play_pause_button_state == 1) {
+                        EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text = "Pause";
+                        play_pause_button_state = 0;
+                        AudioSeekManager.Instance.setPlay (true);
+                        if (AudioSeekManager.Instance.placedInstrument()) {
+                            AudioSeekManager.Instance.playSong();
+                        }
+                    }
+                    else {
+                        EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text = "Play";
+                        play_pause_button_state = 1;
+                        AudioSeekManager.Instance.setPlay (false);
+                        AudioSeekManager.Instance.pauseSong();
                     }
                 }
                 else
