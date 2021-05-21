@@ -6,15 +6,38 @@ using UnityEngine.EventSystems;
 
 public class ButtonManager : MonoBehaviour
 {
-
+    Camera m_MainCamera;
     private bool isClicked = false;
     public string selectedInstrument = null;
     private GameObject selectedObject = null;
     public int delete = 0;
     public int play_pause_button_state = 1; // 0 is showing pause (currently playing), 1 is showing play (currently paused)
+    public bool togglePitchOn = false;
+    
     public void Hello()
     {
         isClicked = true;
+    }
+
+    public void togglePitchSetting()
+    {
+
+        if (EventSystem.current.currentSelectedGameObject != null)
+        {
+            selectedObject = EventSystem.current.currentSelectedGameObject;
+            togglePitchOn = !togglePitchOn;
+            Color myColor = new Color();
+            if (togglePitchOn)
+            {
+                ColorUtility.TryParseHtmlString("#87b5ff", out myColor);
+            }
+            else
+            {
+                ColorUtility.TryParseHtmlString("#FFFFFF", out myColor);
+            }
+            selectedObject.GetComponent<Image>().color = myColor;
+            Debug.Log(Camera.main.transform.position);
+        }
     }
 
     void Update()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -9,7 +10,7 @@ using UnityEngine.XR.ARSubsystems;
 
 public class ARTapToPlaceObject : MonoBehaviour
 {
-
+    Camera m_MainCamera;
     public GameObject gameObjectToInstantiate;
 
     public GameObject pianoObjectToInstantiate;
@@ -29,6 +30,8 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     public ButtonManager buttonManagerScript;
     public DropdownManager dropdownManagerScript;
+    private float instrumentPitch;
+    AudioMixer pitchBendMixer;
 
 
     private GameObject spawnedObject;
@@ -42,6 +45,8 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     void Awake()
     {
+        m_MainCamera = Camera.main;
+        pitchBendMixer = Resources.Load<AudioMixer>("AudioMixer/TrackMixer");
         _arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
@@ -87,6 +92,18 @@ public class ARTapToPlaceObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // pitch is normalized so that when z=0,pitch=1.0. 
+        instrumentPitch = (m_MainCamera.transform.position.z * 1.0f) + 1.0f;
+        if (buttonManagerScript.togglePitchOn)
+        {
+            pitchBendMixer.SetFloat("pitchBend", Mathf.Clamp(instrumentPitch, 0.5f, 2.0f));
+        }
+        else
+        {
+            pitchBendMixer.SetFloat("pitchBend", 1.0f);
+        }
+
+
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
             if(buttonManagerScript.delete == 1)
@@ -134,8 +151,20 @@ public class ARTapToPlaceObject : MonoBehaviour
                 //string tag;
                 Debug.Log(instrument);
                 Debug.Log(dropdownManagerScript.song);
+
+                // Set Audio Output of Spawned Object
+                AudioSource instrumentAudioSource = spawnedObjects[instrument].GetComponent<AudioSource>();
+                if (instrumentAudioSource != null)
+                {
+                    instrumentAudioSource.outputAudioMixerGroup = pitchBendMixer.FindMatchingGroups("Master")[0];
+                } else
+                {
+                    Debug.Log("Error: Couldn't find audio source on instrument");
+                }
+
+                // Setup track for each instrument
                 var clip = Resources.Load(dropdownManagerScript.song) as AudioClip;
-                if(instrument.Contains("Vocal"))
+                if (instrument.Contains("Vocal"))
                 {
                     if(GameObject.FindGameObjectsWithTag("Instrument4").Length != 0)
                     {
