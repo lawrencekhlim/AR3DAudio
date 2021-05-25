@@ -390,7 +390,6 @@ MonoBehaviour:
   miscObjectToInstantiate: {fileID: 1726839335285724, guid: 5e0cb889e94184e8ba33cf9bbac62a65, type: 3}
   buttonManagerScript: {fileID: 964670527}
   dropdownManagerScript: {fileID: 820241203}
-  audioSeekManager: {fileID: 1174816543}
 --- !u!114 &101794944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1842,7 +1841,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c2ab382ef84dd48b67e1f25e92693a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSeekManager: {fileID: 0}
   selectedInstrument: 
   delete: 0
   play_pause_button_state: 1
@@ -1910,7 +1908,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1187280463
 GameObject:
