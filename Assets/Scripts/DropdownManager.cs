@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DropdownManager : MonoBehaviour
 {
-    public string song = "(Look Out) She's America - Otis McDonald";
+    //public string song = "(Look Out) She's America - Otis McDonald";
+    public string song = "Gemini Robot - Bird Creek";
     //public AudioSeekManager audioSeekManager;
+
 
     public void Changed(int val)
     {
@@ -66,71 +68,35 @@ public class DropdownManager : MonoBehaviour
             song = "Road Tripzzz - Ofshane";
         }
         var clip = Resources.Load(song) as AudioClip;
-        // Debug.Log(clip.ToString());
-        if(GameObject.FindGameObjectsWithTag("Instrument1").Length != 0)
-        {
-            AudioSource audio1 = GameObject.FindGameObjectWithTag("Instrument1").GetComponent<AudioSource>();
-            Debug.Log(audio1.ToString());
-            audio1.Pause();
 
-            audio1.clip = Resources.Load("allOutput/" + song + "/bass") as AudioClip;
-            if (audio1.clip == null) {
-                Debug.Log("Audio1 was null");
-                audio1.clip = clip;
-            }
-            audio1.Play();
-        }
-        if(GameObject.FindGameObjectsWithTag("Instrument2").Length != 0)
+        string[] instrument_names = new string[] { "bass", "piano", "drums", "vocals", "other" };
+        for(int i=0; i < 5; i++)
         {
-            AudioSource audio2 = GameObject.FindGameObjectWithTag("Instrument2").GetComponent<AudioSource>();
-            Debug.Log(audio2.ToString());
-            audio2.Pause();
+            string instrument_tag = "Instrument" + (i+1).ToString();
+            string instrument_name = instrument_names[i];
+            if (GameObject.FindGameObjectsWithTag(instrument_tag).Length != 0)
+            {
+                AudioSource audio_left = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[0];
+                AudioSource audio_right = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[1];
+                audio_left.Pause();
+                audio_right.Pause();
 
-            audio2.clip = Resources.Load("allOutput/" + song + "/piano") as AudioClip;
-            if (audio2.clip == null) {
-                Debug.Log("Audio2 was null");
-                audio2.clip = clip;
-            }
-            audio2.Play();
-        }
-        if(GameObject.FindGameObjectsWithTag("Instrument3").Length != 0)
-        {
-            AudioSource audio3 = GameObject.FindGameObjectWithTag("Instrument3").GetComponent<AudioSource>();
-            Debug.Log(audio3.ToString());
-            audio3.Pause();
+                audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_left") as AudioClip;
+                audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_right") as AudioClip;
 
-            audio3.clip = Resources.Load("allOutput/" + song + "/drums") as AudioClip;
-            if (audio3.clip == null) {
-                Debug.Log("Audio3 was null");
-                audio3.clip = clip;
+                if (audio_left.clip == null)
+                {
+                    Debug.Log("Audio" + (i+1).ToString() + "_left was null");
+                    audio_left.clip = clip;
+                }
+                if (audio_right.clip == null)
+                {
+                    Debug.Log("Audio" + (i + 1).ToString() + "_right was null");
+                    audio_right.clip = clip;
+                }
+                audio_left.Play();
+                audio_right.Play();
             }
-            audio3.Play();
-        }
-        if(GameObject.FindGameObjectsWithTag("Instrument4").Length != 0)
-        {
-            AudioSource audio4 = GameObject.FindGameObjectWithTag("Instrument4").GetComponent<AudioSource>();
-            Debug.Log(audio4.ToString());
-            audio4.Pause();
-
-            audio4.clip = Resources.Load("allOutput/" + song + "/vocals") as AudioClip;
-            if (audio4.clip == null) {
-                Debug.Log("Audio4 was null");
-                audio4.clip = clip;
-            }
-            audio4.Play();
-        }
-        if(GameObject.FindGameObjectsWithTag("Instrument5").Length != 0)
-        {
-            AudioSource audio5 = GameObject.FindGameObjectWithTag("Instrument5").GetComponent<AudioSource>();
-            Debug.Log(audio5.ToString());
-            audio5.Pause();
-
-            audio5.clip = Resources.Load("allOutput/" + song + "/other") as AudioClip;
-            if (audio5.clip == null) {
-                Debug.Log("Audio5 was null");
-                audio5.clip = clip;
-            }
-            audio5.Play();
         }
     }
 }
