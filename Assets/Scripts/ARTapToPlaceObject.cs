@@ -152,6 +152,10 @@ public class ARTapToPlaceObject : MonoBehaviour
                 Debug.Log(instrument);
                 Debug.Log(dropdownManagerScript.song);
 
+
+                AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
+                AudioSeekManager.Instance.playSong();
+                /*
                 // Set Audio Output of Spawned Object
                 AudioSource instrumentAudioSource = spawnedObjects[instrument].GetComponent<AudioSource>();
                 if (instrumentAudioSource != null)
@@ -163,6 +167,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                 }
 
                 // Setup track for each instrument
+                
                 var clip = Resources.Load(dropdownManagerScript.song) as AudioClip;
                 if (instrument.Contains("Vocal"))
                 {
@@ -219,6 +224,8 @@ public class ARTapToPlaceObject : MonoBehaviour
                         AudioSeekManager.Instance.playSong();
                     }
                 }
+
+                */
             }
             else
             {

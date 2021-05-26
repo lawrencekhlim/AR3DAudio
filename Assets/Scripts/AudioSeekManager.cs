@@ -44,7 +44,7 @@ public class AudioSeekManager : MonoBehaviour
         //Debug.Log (currentlyPlaying);
         //Debug.Log (placedInstrument());
         if (currentlyPlaying && placedInstrument()) { // currently playing audio, update currentTime
-            currentTime += Time.deltaTime;
+            currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
             //Debug.Log("The current time is updated");
             interval_tracker += Time.deltaTime;
             if (interval_tracker > replay_interval)
@@ -113,11 +113,52 @@ public class AudioSeekManager : MonoBehaviour
                 GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
                 AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
 
-                audioSources[0].time = currentTime;
-                audioSources[1].time = currentTime;
-
                 audioSources[0].Play();
                 audioSources[1].Play();
+
+                audioSources[0].time = currentTime;
+                audioSources[1].time = currentTime;
+            }
+        }
+    }
+
+    public void setTracks (string song) {
+        var clip = Resources.Load(song) as AudioClip;
+
+        string[] instrument_names = new string[] { "bass", "piano", "drums", "vocals", "other" };
+        for(int i=0; i < 5; i++)
+        {
+            string instrument_tag = "Instrument" + (i+1).ToString();
+            string instrument_name = instrument_names[i];
+
+            Debug.Log ("Before FindGameObjectsWithTag");
+
+            if (GameObject.FindGameObjectsWithTag(instrument_tag).Length != 0)
+            {
+                AudioSource audio_left = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[0];
+                AudioSource audio_right = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[1];
+                audio_left.Pause();
+                audio_right.Pause();
+
+                audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_left") as AudioClip;
+                audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_right") as AudioClip;
+
+                Debug.Log(audio_left.ToString());
+                Debug.Log(audio_right.ToString());
+
+                if (audio_left.clip == null)
+                {
+                    Debug.Log("Audio" + (i+1).ToString() + "_left was null");
+                    audio_left.clip = clip;
+                }
+                if (audio_right.clip == null)
+                {
+                    Debug.Log("Audio" + (i + 1).ToString() + "_right was null");
+                    audio_right.clip = clip;
+                }
+
+                audio_left.Play();
+                audio_right.Play();
             }
         }
     }
@@ -133,7 +174,7 @@ public class AudioSeekManager : MonoBehaviour
                     GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
                     Vector3 instrument_position = instrumentObject.transform.position;
-                    Debug.Log(instr);
+                    //Debug.Log(instr);
 
                     // Check instrument has 2 audio sources
                     if (audioSources.Length < 2)
@@ -146,7 +187,7 @@ public class AudioSeekManager : MonoBehaviour
                     // Get Delay. if track_delay < 0, delay left ear. if track_delay > 0, delay right ear. 
                     // index 0 is left ear. index 1 is right ear. 
                     float track_delay = calculate_delay(camera_position, instrument_position, camera_direction);
-                    Debug.Log(track_delay);
+                    //Debug.Log(track_delay);
                     
 
                     audioSources[0].time = audioSources[0].time;
@@ -160,9 +201,6 @@ public class AudioSeekManager : MonoBehaviour
                         audioSources[1].time += Mathf.Abs(track_delay);
                     }
 
-
-                    audioSources[0].Play();
-                    audioSources[1].Play();
                 }
             }
         }

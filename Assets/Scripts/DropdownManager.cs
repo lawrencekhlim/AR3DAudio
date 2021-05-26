@@ -67,36 +67,8 @@ public class DropdownManager : MonoBehaviour
         {
             song = "Road Tripzzz - Ofshane";
         }
-        var clip = Resources.Load(song) as AudioClip;
 
-        string[] instrument_names = new string[] { "bass", "piano", "drums", "vocals", "other" };
-        for(int i=0; i < 5; i++)
-        {
-            string instrument_tag = "Instrument" + (i+1).ToString();
-            string instrument_name = instrument_names[i];
-            if (GameObject.FindGameObjectsWithTag(instrument_tag).Length != 0)
-            {
-                AudioSource audio_left = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[0];
-                AudioSource audio_right = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[1];
-                audio_left.Pause();
-                audio_right.Pause();
+        AudioSeekManager.Instance.setTracks (song);
 
-                audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_left") as AudioClip;
-                audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_right") as AudioClip;
-
-                if (audio_left.clip == null)
-                {
-                    Debug.Log("Audio" + (i+1).ToString() + "_left was null");
-                    audio_left.clip = clip;
-                }
-                if (audio_right.clip == null)
-                {
-                    Debug.Log("Audio" + (i + 1).ToString() + "_right was null");
-                    audio_right.clip = clip;
-                }
-                audio_left.Play();
-                audio_right.Play();
-            }
-        }
     }
 }
