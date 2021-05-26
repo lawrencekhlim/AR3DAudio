@@ -9,6 +9,7 @@ TagManager:
   - Instrument3
   - Instrument4
   - Instrument5
+  - test
   layers:
   - Default
   - TransparentFX
