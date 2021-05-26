@@ -14,7 +14,9 @@ public class AudioSeekManager : MonoBehaviour
     public string [] instrument_names = { "Instrument1", "Instrument2", "Instrument3", "Instrument4", "Instrument5" };
 
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
-    private float replay_interval = 1.0f;        // how long before we replay song
+    private float replay_interval = 0.0f;        // how long before we replay song
+    private Dictionary <string, float> prev_itd;
+    private float min_dif_delay = 0.0001f;
 
 
     // Static singleton property
@@ -22,6 +24,12 @@ public class AudioSeekManager : MonoBehaviour
      
     void Awake()
     {
+        prev_itd = new Dictionary <string, float> ();
+        foreach(string instr in instrument_names)  
+        {
+            prev_itd[instr] = 0.0f;
+        }
+
         // First we check if there are any other instances conflicting
         if(Instance != null && Instance != this)
         {
@@ -187,18 +195,24 @@ public class AudioSeekManager : MonoBehaviour
                     // Get Delay. if track_delay < 0, delay left ear. if track_delay > 0, delay right ear. 
                     // index 0 is left ear. index 1 is right ear. 
                     float track_delay = calculate_delay(camera_position, instrument_position, camera_direction);
-                    //Debug.Log(track_delay);
+                    //Debug.Log("Before If statement");
+                    //Debug.Log (track_delay);
+                    //Debug.Log (prev_itd[instr]);
                     
-
-                    audioSources[0].time = audioSources[0].time;
-                    audioSources[1].time = audioSources[0].time;
-                    if (track_delay < 0)
-                    {
-                        audioSources[0].time += Mathf.Abs(track_delay);
-                    }
-                    else
-                    {
-                        audioSources[1].time += Mathf.Abs(track_delay);
+                    if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay) {
+                        //Debug.Log ("Updated delay");
+                        //Debug.Log (track_delay);
+                        audioSources[0].time = audioSources[0].time;
+                        audioSources[1].time = audioSources[0].time;
+                        if (track_delay < 0)
+                        {
+                            audioSources[0].time += Mathf.Abs(track_delay);
+                        }
+                        else
+                        {
+                            audioSources[1].time += Mathf.Abs(track_delay);
+                        }
+                        prev_itd[instr] = track_delay; 
                     }
 
                 }
