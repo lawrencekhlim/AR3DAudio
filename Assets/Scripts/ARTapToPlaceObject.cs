@@ -93,7 +93,7 @@ public class ARTapToPlaceObject : MonoBehaviour
     void Update()
     {
         // pitch is normalized so that when z=0,pitch=1.0. 
-        instrumentPitch = (m_MainCamera.transform.position.z * 1.0f) + 1.0f;
+        instrumentPitch = (m_MainCamera.transform.position.y * 1.0f) + 1.0f;
         if (buttonManagerScript.togglePitchOn)
         {
             pitchBendMixer.SetFloat("pitchBend", Mathf.Clamp(instrumentPitch, 0.5f, 2.0f));

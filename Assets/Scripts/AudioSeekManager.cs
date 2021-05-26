@@ -41,7 +41,7 @@ public class AudioSeekManager : MonoBehaviour
         //Debug.Log (placedInstrument());
         if (currentlyPlaying && placedInstrument()) { // currently playing audio, update currentTime
             currentTime += Time.deltaTime;
-            Debug.Log("The current time is updated");
+            //Debug.Log("The current time is updated");
             //playSong();
         }
     }

@@ -24,7 +24,7 @@ public class ButtonManager : MonoBehaviour
 
         if (EventSystem.current.currentSelectedGameObject != null)
         {
-            selectedObject = EventSystem.current.currentSelectedGameObject;
+            GameObject pitchButton = EventSystem.current.currentSelectedGameObject;
             togglePitchOn = !togglePitchOn;
             Color myColor = new Color();
             if (togglePitchOn)
@@ -35,7 +35,7 @@ public class ButtonManager : MonoBehaviour
             {
                 ColorUtility.TryParseHtmlString("#FFFFFF", out myColor);
             }
-            selectedObject.GetComponent<Image>().color = myColor;
+            pitchButton.GetComponent<Image>().color = myColor;
             Debug.Log(Camera.main.transform.position);
         }
     }
