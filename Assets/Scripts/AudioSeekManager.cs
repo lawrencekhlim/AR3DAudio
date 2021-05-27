@@ -112,6 +112,42 @@ public class AudioSeekManager : MonoBehaviour
         return delay * direction;
     }
 
+    private float[] calculate_level_difference (Vector3 camera_pos, Vector3 instrument_pos, Vector3 camera_dir) {
+        Vector3 position_vec1 = instrument_pos - camera_pos;
+        Vector2 position_vec = new Vector2(position_vec1.x, position_vec1.z);
+        
+        float min_distance = 1;
+        float max_distance = 500;
+        //Vector2 position_vec2 = new Vector2 
+        if (position_vec.magnitude == 0) {
+            return new float[2] {1.0f,1.0f};            // if position vector is 0, then they are on same location so no delay
+        }
+        if (position_vec.magnitude < 1) {
+            position_vec = position_vec.normalized; // Gives us a unit vector in that direction
+        }
+        camera_dir = camera_dir.normalized;
+
+        float angle = Mathf.Acos (Vector3.Dot(position_vec, camera_dir) / (position_vec.magnitude * camera_dir.magnitude));
+
+        /*
+        float sub_dot = (position_vec2.x * camera_vec2.y) - (position_vec2.y * camera_vec2.x);
+        if (sub_dot == 0.0f)
+        {
+            sub_dot = 1.0f;
+        } */
+        //float direction = sub_dot / Mathf.Abs(sub_dot); 
+        
+        float radius = 0.0875f; 
+        float pythagorean = Mathf.Sqrt(position_vec.magnitude * position_vec.magnitude+ radius * radius);
+        float temp1 = position_vec.magnitude + radius - pythagorean;
+        float left = 1.5f* Mathf.Sin(angle) * temp1 + pythagorean;
+        float right = 1.5f * Mathf.Sin(-1 * angle) * temp1 + pythagorean;
+        Debug.Log ("Angle: " + angle.ToString());
+        Debug.Log ("Left: " + left.ToString());
+        Debug.Log ("Right: " + right.ToString());
+        return new float [2] { Mathf.Clamp ((1 / left) / left, 0, 1), Mathf.Clamp ((1 / right)/right, 0, 1) };
+    }
+
     public void playSong()
     {
         foreach (string instr in instrument_names)
@@ -198,7 +234,13 @@ public class AudioSeekManager : MonoBehaviour
                     //Debug.Log("Before If statement");
                     //Debug.Log (track_delay);
                     //Debug.Log (prev_itd[instr]);
-                    
+
+                    float [] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
+                    audioSources[0].volume = volume[0]; // left
+                    audioSources[1].volume = volume[1]; // right
+                    //Debug.Log (audioSources[0].volume);
+                    //Debug.Log (audioSources[1].volume);
+
                     if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay) {
                         //Debug.Log ("Updated delay");
                         //Debug.Log (track_delay);
