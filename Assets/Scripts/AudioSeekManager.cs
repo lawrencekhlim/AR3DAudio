@@ -51,6 +51,7 @@ public class AudioSeekManager : MonoBehaviour
         //Debug.Log ("Updated is called in AudioSeekManager.");
         //Debug.Log (currentlyPlaying);
         //Debug.Log (placedInstrument());
+       
         if (currentlyPlaying && placedInstrument()) { // currently playing audio, update currentTime
             currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
             //Debug.Log("The current time is updated");
@@ -115,19 +116,22 @@ public class AudioSeekManager : MonoBehaviour
     private float[] calculate_level_difference (Vector3 camera_pos, Vector3 instrument_pos, Vector3 camera_dir) {
         Vector3 position_vec1 = instrument_pos - camera_pos;
         Vector2 position_vec = new Vector2(position_vec1.x, position_vec1.z);
+        Vector2 camera_vec = new Vector2(camera_dir.x, camera_dir.z);
         
         float min_distance = 1;
         float max_distance = 500;
         //Vector2 position_vec2 = new Vector2 
+        Debug.Log("Position Difference Magnitude: " + position_vec.ToString());
+        
         if (position_vec.magnitude == 0) {
             return new float[2] {1.0f,1.0f};            // if position vector is 0, then they are on same location so no delay
         }
         if (position_vec.magnitude < 1) {
             position_vec = position_vec.normalized; // Gives us a unit vector in that direction
         }
-        camera_dir = camera_dir.normalized;
+        camera_vec = camera_vec.normalized;
 
-        float angle = Mathf.Acos (Vector3.Dot(position_vec, camera_dir) / (position_vec.magnitude * camera_dir.magnitude));
+        float angle = Mathf.Acos (Vector3.Dot(position_vec, camera_vec) / (position_vec.magnitude * camera_vec.magnitude));
 
         /*
         float sub_dot = (position_vec2.x * camera_vec2.y) - (position_vec2.y * camera_vec2.x);
@@ -231,7 +235,7 @@ public class AudioSeekManager : MonoBehaviour
                     // Get Delay. if track_delay < 0, delay left ear. if track_delay > 0, delay right ear. 
                     // index 0 is left ear. index 1 is right ear. 
                     float track_delay = calculate_delay(camera_position, instrument_position, camera_direction);
-                    //Debug.Log("Before If statement");
+                    Debug.Log("Before If statement");
                     //Debug.Log (track_delay);
                     //Debug.Log (prev_itd[instr]);
 
