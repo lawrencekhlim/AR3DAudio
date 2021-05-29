@@ -132,24 +132,42 @@ public class AudioSeekManager : MonoBehaviour
         camera_vec = camera_vec.normalized;
 
         float angle = Mathf.Acos (Vector3.Dot(position_vec, camera_vec) / (position_vec.magnitude * camera_vec.magnitude));
+   
+        
+        float distance = position_vec.magnitude;
+        float volume = 1 / Mathf.Pow(distance, 2.0f);
+        float PI = (float)Math.PI;
+        float theta2 = Mathf.Abs( PI / 2.0f - angle);
+        float closer_ear = (PI - theta2) / PI;
+        float further_ear = theta2 / PI;
 
-        /*
-        float sub_dot = (position_vec2.x * camera_vec2.y) - (position_vec2.y * camera_vec2.x);
+
+        //  Calculate which ear is delayed (negative is left, positive is right)
+        float sub_dot = (position_vec.x * camera_vec.y) - (position_vec.y * camera_vec.x);
         if (sub_dot == 0.0f)
         {
             sub_dot = 1.0f;
-        } */
-        //float direction = sub_dot / Mathf.Abs(sub_dot); 
-        
-        float radius = 0.0875f; 
-        float pythagorean = Mathf.Sqrt(position_vec.magnitude * position_vec.magnitude+ radius * radius);
-        float temp1 = position_vec.magnitude + radius - pythagorean;
-        float left = 1.5f* Mathf.Sin(angle) * temp1 + pythagorean;
-        float right = 1.5f * Mathf.Sin(-1 * angle) * temp1 + pythagorean;
-        Debug.Log ("Angle: " + angle.ToString());
-        Debug.Log ("Left: " + left.ToString());
-        Debug.Log ("Right: " + right.ToString());
-        return new float [2] { Mathf.Clamp ((1 / left) / left, 0, 1), Mathf.Clamp ((1 / right)/right, 0, 1) };
+        }
+        float direction = sub_dot / Mathf.Abs(sub_dot);
+
+        // Dampen if source is behind camera normal
+        if (angle > PI / 2.0f)
+        {
+            volume *= 0.9f;
+        }
+
+        // Get result
+        float further_ear_offset = further_ear / closer_ear;
+        float[] result = new float[2] { volume, volume };
+        if (direction < 0)
+        {
+            result[1] = volume * further_ear_offset;
+        } else
+        {
+            result[0] = volume * further_ear_offset;
+        }
+
+        return result;
     }
 
     public void playSong()
