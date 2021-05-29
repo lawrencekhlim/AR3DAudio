@@ -157,7 +157,8 @@ public class AudioSeekManager : MonoBehaviour
         }
 
         // Get result
-        float further_ear_offset = further_ear / closer_ear;
+        float interaural_level_difference_amount = 3.0f / 4.0f;
+        float further_ear_offset = (further_ear / closer_ear) * interaural_level_difference_amount + 1.0f - interaural_level_difference_amount;
         float[] result = new float[2] { volume, volume };
         if (direction < 0)
         {
