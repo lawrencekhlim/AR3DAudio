@@ -59,7 +59,7 @@ public class ARTapToPlaceObject : MonoBehaviour
     {
         m_MainCamera = Camera.main;
         pitchBendMixer = Resources.Load<AudioMixer>("AudioMixer/TrackMixer");
-        object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference)")[0].GetComponent<Slider>();
+        object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
         _arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
@@ -163,10 +163,12 @@ public class ARTapToPlaceObject : MonoBehaviour
 
         }
 
+        
         if (instrument != null)
         {
             float newSize = objectScale[instrument] * object_scale_slider.value;
             spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
         }
+        
     }
 }

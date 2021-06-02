@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 3669683154227945582}
   m_Layer: 0
   m_Name: 5StringBass
-  m_TagString: Instrument1
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
