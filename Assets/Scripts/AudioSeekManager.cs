@@ -14,7 +14,7 @@ public class AudioSeekManager : MonoBehaviour
     public string [] instrument_names = { "Instrument1", "Instrument2", "Instrument3", "Instrument4", "Instrument5" };
 
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
-    private float replay_interval = 0.0f;        // how long before we replay song
+    private float replay_interval = 0.1f;        // how long before we replay song
     private Dictionary <string, float> prev_itd;
     private float min_dif_delay = 0.0001f;
 
