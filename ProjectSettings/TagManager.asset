@@ -10,6 +10,8 @@ TagManager:
   - Instrument4
   - Instrument5
   - test
+  - Slider_Level_Difference
+  - Slider_Time_Difference
   layers:
   - Default
   - TransparentFX

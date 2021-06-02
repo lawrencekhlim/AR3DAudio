@@ -18,6 +18,11 @@ public class AudioSeekManager : MonoBehaviour
     private Dictionary <string, float> prev_itd;
     private float min_dif_delay = 0.0001f;
 
+    private Slider level_difference_slider;
+    private Slider time_difference_slider;
+    private Slider distance_difference_slider;
+
+
 
     // Static singleton property
     public static AudioSeekManager Instance { get; private set; }
@@ -25,7 +30,12 @@ public class AudioSeekManager : MonoBehaviour
     void Awake()
     {
         prev_itd = new Dictionary <string, float> ();
-        foreach(string instr in instrument_names)  
+
+        level_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Level_Difference")[0].GetComponent<Slider>();
+        time_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Time_Difference")[0].GetComponent<Slider>();
+        distance_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
+
+        foreach (string instr in instrument_names)  
         {
             prev_itd[instr] = 0.0f;
         }
@@ -135,7 +145,7 @@ public class AudioSeekManager : MonoBehaviour
    
         
         float distance = position_vec.magnitude;
-        float volume = 1 / Mathf.Pow(distance, 2.0f);
+        float volume = 1 / Mathf.Pow(distance, distance_difference_slider.value);
         float PI = (float)Math.PI;
         float theta2 = Mathf.Abs( PI / 2.0f - angle);
         float closer_ear = (PI - theta2) / PI;
@@ -157,7 +167,7 @@ public class AudioSeekManager : MonoBehaviour
         }
 
         // Get result
-        float interaural_level_difference_amount = 3.0f / 4.0f;
+        float interaural_level_difference_amount = level_difference_slider.value;
         float further_ear_offset = (further_ear / closer_ear) * interaural_level_difference_amount + 1.0f - interaural_level_difference_amount;
         float[] result = new float[2] { volume, volume };
         if (direction < 0)
@@ -259,11 +269,14 @@ public class AudioSeekManager : MonoBehaviour
                     //Debug.Log (prev_itd[instr]);
 
                     float [] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
+
                     audioSources[0].volume = volume[0]; // left
                     audioSources[1].volume = volume[1]; // right
-                    //Debug.Log (audioSources[0].volume);
-                    //Debug.Log (audioSources[1].volume);
+                    
 
+
+
+                    track_delay *= time_difference_slider.value;
                     if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay) {
                         //Debug.Log ("Updated delay");
                         //Debug.Log (track_delay);
