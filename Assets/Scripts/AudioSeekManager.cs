@@ -183,18 +183,21 @@ public class AudioSeekManager : MonoBehaviour
 
     public void playSong()
     {
-        foreach (string instr in instrument_names)
+        if (currentlyPlaying)
         {
-            if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+            foreach (string instr in instrument_names)
             {
-                GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
-                AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
+                if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+                {
+                    GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
+                    AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
 
-                audioSources[0].Play();
-                audioSources[1].Play();
+                    audioSources[0].Play();
+                    audioSources[1].Play();
 
-                audioSources[0].time = currentTime;
-                audioSources[1].time = currentTime;
+                    audioSources[0].time = currentTime;
+                    audioSources[1].time = currentTime;
+                }
             }
         }
     }
@@ -233,9 +236,6 @@ public class AudioSeekManager : MonoBehaviour
                     Debug.Log("Audio" + (i + 1).ToString() + "_right was null");
                     audio_right.clip = clip;
                 }
-
-                audio_left.Play();
-                audio_right.Play();
             }
         }
     }
