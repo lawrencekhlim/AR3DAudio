@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(ARRaycastManager))]
 
@@ -28,6 +30,15 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Misc", null},
         };
 
+    public Dictionary<string, float> objectScale =
+        new Dictionary<string, float>(){
+            {"Piano", 0.9f},
+            {"Drum", 0.15f},
+            {"Bass", 0.03f},
+            {"Vocal", 0.2f},
+            {"Misc", 0.06f},
+        };
+
     public ButtonManager buttonManagerScript;
     public DropdownManager dropdownManagerScript;
     private float instrumentPitch;
@@ -42,11 +53,13 @@ public class ARTapToPlaceObject : MonoBehaviour
     
     static List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
+    private Slider object_scale_slider;
 
     void Awake()
     {
         m_MainCamera = Camera.main;
         pitchBendMixer = Resources.Load<AudioMixer>("AudioMixer/TrackMixer");
+        object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference)")[0].GetComponent<Slider>();
         _arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
@@ -103,13 +116,13 @@ public class ARTapToPlaceObject : MonoBehaviour
             pitchBendMixer.SetFloat("pitchBend", 1.0f);
         }
 
+        string instrument = buttonManagerScript.selectedInstrument;
 
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
             if(buttonManagerScript.delete == 1)
             {
                 // Debug.Log("About to delete");
-                string instrument = buttonManagerScript.selectedInstrument;
                 if (instrument == null)
                     return;
 
@@ -123,25 +136,11 @@ public class ARTapToPlaceObject : MonoBehaviour
             return;
         }
 
-        /*if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon)) {
-            var hitPose = hits[0].pose;
-            
-            if (spawnedObject == null) {
-                spawnedObject = Instantiate (gameObjectToInstantiate, hitPose.position, hitPose.rotation);
-            }
-            else
-            {
-                spawnedObject.transform.position = hitPose.position;
-            }
-        
-        }*/
-
         if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
 
 
-            string instrument = buttonManagerScript.selectedInstrument;
             if (instrument == null)
                 return;
 
@@ -155,83 +154,19 @@ public class ARTapToPlaceObject : MonoBehaviour
 
                 AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
                 AudioSeekManager.Instance.playSong();
-                /*
-                // Set Audio Output of Spawned Object
-                AudioSource instrumentAudioSource = spawnedObjects[instrument].GetComponent<AudioSource>();
-                if (instrumentAudioSource != null)
-                {
-                    instrumentAudioSource.outputAudioMixerGroup = pitchBendMixer.FindMatchingGroups("Master")[0];
-                } else
-                {
-                    Debug.Log("Error: Couldn't find audio source on instrument");
-                }
-
-                // Setup track for each instrument
                 
-                var clip = Resources.Load(dropdownManagerScript.song) as AudioClip;
-                if (instrument.Contains("Vocal"))
-                {
-                    if(GameObject.FindGameObjectsWithTag("Instrument4").Length != 0)
-                    {
-                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument4").GetComponent<AudioSource>();
-                        Debug.Log(audio.ToString());
-                        audio.Pause();
-                        audio.clip = clip;
-                        AudioSeekManager.Instance.playSong();
-                    }
-                }
-                else if(instrument.Contains("Bass"))
-                {
-                    if(GameObject.FindGameObjectsWithTag("Instrument1").Length != 0)
-                    {
-                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument1").GetComponent<AudioSource>();
-                        Debug.Log(audio.ToString());
-                        audio.Pause();
-                        audio.clip = clip;
-                        AudioSeekManager.Instance.playSong();
-                    }
-                }
-                else if(instrument.Contains("Misc"))
-                {
-                    if(GameObject.FindGameObjectsWithTag("Instrument5").Length != 0)
-                    {
-                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument5").GetComponent<AudioSource>();
-                        Debug.Log(audio.ToString());
-                        audio.Pause();
-                        audio.clip = clip;
-                        AudioSeekManager.Instance.playSong();
-                    }
-                }
-                else if(instrument.Contains("Drum"))
-                {
-                    if(GameObject.FindGameObjectsWithTag("Instrument3").Length != 0)
-                    {
-                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument3").GetComponent<AudioSource>();
-                        Debug.Log(audio.ToString());
-                        audio.Pause();
-                        audio.clip = clip;
-                        AudioSeekManager.Instance.playSong();
-                    }
-                }
-                else if(instrument.Contains("Piano"))
-                {
-                    if(GameObject.FindGameObjectsWithTag("Instrument2").Length != 0)
-                    {
-                        AudioSource audio = GameObject.FindGameObjectWithTag("Instrument2").GetComponent<AudioSource>();
-                        Debug.Log(audio.ToString());
-                        audio.Pause();
-                        audio.clip = clip;
-                        AudioSeekManager.Instance.playSong();
-                    }
-                }
-
-                */
             }
             else
             {
                 spawnedObjects[instrument].transform.position = hitPose.position;
             }
 
+        }
+
+        if (instrument != null)
+        {
+            float newSize = objectScale[instrument] * object_scale_slider.value;
+            spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
         }
     }
 }

@@ -13,6 +13,7 @@ TagManager:
   - Slider_Level_Difference
   - Slider_Time_Difference
   - Slider_Distance_Difference
+  - Slider_Object_Scaling
   layers:
   - Default
   - TransparentFX
