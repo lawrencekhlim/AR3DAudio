@@ -32,11 +32,11 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     public Dictionary<string, float> objectScale =
         new Dictionary<string, float>(){
-            {"Piano", 0.9f},
-            {"Drum", 0.15f},
-            {"Bass", 0.03f},
-            {"Vocal", 0.2f},
-            {"Misc", 0.06f},
+            {"Piano", 0.45f},
+            {"Drum", 0.075f},
+            {"Bass", 0.3f},
+            {"Vocal", 0.1f},
+            {"Misc", 0.03f},
         };
 
     public ButtonManager buttonManagerScript;
@@ -59,7 +59,7 @@ public class ARTapToPlaceObject : MonoBehaviour
     {
         m_MainCamera = Camera.main;
         pitchBendMixer = Resources.Load<AudioMixer>("AudioMixer/TrackMixer");
-        object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
+        object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Object_Scaling")[0].GetComponent<Slider>();
         _arRaycastManager = GetComponent<ARRaycastManager>();
     }
 
@@ -69,7 +69,7 @@ public class ARTapToPlaceObject : MonoBehaviour
         if (Input.touchCount > 0) {
             touchPosition = Input.GetTouch(0).position;
 
-            if(touchPosition.y > Screen.height * 0.9 || touchPosition.y < Screen.height*0.1){
+            if(touchPosition.y > Screen.height * 0.8 || touchPosition.y < Screen.height*0.15){
                 touchPosition = default;
                 return false;
             }
@@ -123,17 +123,16 @@ public class ARTapToPlaceObject : MonoBehaviour
             if(buttonManagerScript.delete == 1)
             {
                 // Debug.Log("About to delete");
-                if (instrument == null)
-                    return;
+                if (instrument != null) {
 
-                if (spawnedObjects[instrument] != null)
-                {
-                    Destroy(spawnedObjects[instrument]);
-                    spawnedObjects[instrument] = null;
+                    if (spawnedObjects[instrument] != null)
+                    {
+                        Destroy(spawnedObjects[instrument]);
+                        spawnedObjects[instrument] = null;
+                    }
+                    buttonManagerScript.delete = 0;
                 }
-                buttonManagerScript.delete = 0;
             }
-            return;
         }
 
         if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
@@ -141,24 +140,26 @@ public class ARTapToPlaceObject : MonoBehaviour
             var hitPose = hits[0].pose;
 
 
-            if (instrument == null)
-                return;
+            if (instrument != null) {
+                if (spawnedObjects[instrument] == null)
+                {
 
-            if (spawnedObjects[instrument] == null)
-            {
-                spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
-                //string tag;
-                Debug.Log(instrument);
-                Debug.Log(dropdownManagerScript.song);
+                    Debug.Log ("Here before Instantiate");
+                    spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
+                    //string tag;
+                    Debug.Log(instrument);
+                    Debug.Log(spawnedObjects[instrument].transform.rotation);
+                    Debug.Log(dropdownManagerScript.song);
 
 
-                AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
-                AudioSeekManager.Instance.playSong();
-                
-            }
-            else
-            {
-                spawnedObjects[instrument].transform.position = hitPose.position;
+                    AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
+                    AudioSeekManager.Instance.playSong();
+                    
+                }
+                else
+                {
+                    spawnedObjects[instrument].transform.position = hitPose.position;
+                }
             }
 
         }
@@ -166,8 +167,10 @@ public class ARTapToPlaceObject : MonoBehaviour
         
         if (instrument != null)
         {
+            Debug.Log ("Here 1");
             float newSize = objectScale[instrument] * object_scale_slider.value;
             spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
+            Debug.Log ("Here 2");
         }
         
     }
