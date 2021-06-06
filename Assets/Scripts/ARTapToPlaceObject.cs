@@ -118,13 +118,13 @@ public class ARTapToPlaceObject : MonoBehaviour
 
         string instrument = buttonManagerScript.selectedInstrument;
 
-                
         if (instrument != null)
         {
             float newSize = objectScale[instrument] * object_scale_slider.value;
-            spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
+            if (spawnedObjects[instrument] != null) {
+                spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
+            }
         }
-
 
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
