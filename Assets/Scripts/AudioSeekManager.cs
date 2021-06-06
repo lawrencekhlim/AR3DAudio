@@ -58,15 +58,14 @@ public class AudioSeekManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log ("Updated is called in AudioSeekManager.");
-        Debug.Log (currentlyPlaying);
-        Debug.Log (placedInstrument());
+        //Debug.Log ("Updated is called in AudioSeekManager.");
+        //Debug.Log (currentlyPlaying);
+        //Debug.Log (placedInstrument());
        
         if (currentlyPlaying && placedInstrument()) { // currently playing audio, update currentTime
             currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
-            Debug.Log("The current time is updated");
+            //Debug.Log("The current time is updated");
             interval_tracker += Time.deltaTime;
-            
             if (interval_tracker > replay_interval)
             {
                 updateSongDelay();
@@ -218,6 +217,8 @@ public class AudioSeekManager : MonoBehaviour
             {
                 AudioSource audio_left = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[0];
                 AudioSource audio_right = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[1];
+                audio_left.Pause();
+                audio_right.Pause();
 
                 audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_left") as AudioClip;
                 audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_right") as AudioClip;

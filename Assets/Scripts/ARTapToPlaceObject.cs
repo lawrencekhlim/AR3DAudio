@@ -36,7 +36,7 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Drum", 0.075f},
             {"Bass", 0.3f},
             {"Vocal", 0.1f},
-            {"Misc", 0.03f},
+            {"Misc", 0.025f},
         };
 
     public ButtonManager buttonManagerScript;
@@ -118,21 +118,30 @@ public class ARTapToPlaceObject : MonoBehaviour
 
         string instrument = buttonManagerScript.selectedInstrument;
 
+                
+        if (instrument != null)
+        {
+            float newSize = objectScale[instrument] * object_scale_slider.value;
+            spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
+        }
+
+
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
             if(buttonManagerScript.delete == 1)
             {
                 // Debug.Log("About to delete");
-                if (instrument != null) {
+                if (instrument == null)
+                    return;
 
-                    if (spawnedObjects[instrument] != null)
-                    {
-                        Destroy(spawnedObjects[instrument]);
-                        spawnedObjects[instrument] = null;
-                    }
-                    buttonManagerScript.delete = 0;
+                if (spawnedObjects[instrument] != null)
+                {
+                    Destroy(spawnedObjects[instrument]);
+                    spawnedObjects[instrument] = null;
                 }
+                buttonManagerScript.delete = 0;
             }
+            return;
         }
 
         if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
@@ -140,37 +149,26 @@ public class ARTapToPlaceObject : MonoBehaviour
             var hitPose = hits[0].pose;
 
 
-            if (instrument != null) {
-                if (spawnedObjects[instrument] == null)
-                {
+            if (instrument == null)
+                return;
 
-                    Debug.Log ("Here before Instantiate");
-                    spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
-                    //string tag;
-                    Debug.Log(instrument);
-                    Debug.Log(spawnedObjects[instrument].transform.rotation);
-                    Debug.Log(dropdownManagerScript.song);
+            if (spawnedObjects[instrument] == null)
+            {
+                spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
+                //string tag;
+                Debug.Log(instrument);
+                Debug.Log(dropdownManagerScript.song);
 
 
-                    AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
-                    AudioSeekManager.Instance.playSong();
-                    
-                }
-                else
-                {
-                    spawnedObjects[instrument].transform.position = hitPose.position;
-                }
+                AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
+                AudioSeekManager.Instance.playSong();
+                
+            }
+            else
+            {
+                spawnedObjects[instrument].transform.position = hitPose.position;
             }
 
-        }
-
-        
-        if (instrument != null)
-        {
-            Debug.Log ("Here 1");
-            float newSize = objectScale[instrument] * object_scale_slider.value;
-            spawnedObjects[instrument].transform.localScale = new Vector3(newSize, newSize, newSize);
-            Debug.Log ("Here 2");
         }
         
     }
