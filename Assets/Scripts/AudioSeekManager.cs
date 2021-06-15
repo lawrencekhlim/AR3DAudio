@@ -66,12 +66,13 @@ public class AudioSeekManager : MonoBehaviour
             currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
             //Debug.Log("The current time is updated");
             interval_tracker += Time.deltaTime;
-            if (interval_tracker > replay_interval)
+            /*if (interval_tracker > replay_interval)
             {
                 updateSongDelay();
                 interval_tracker = 0.0f;
-            }
-            
+            }*/
+            updateSongDelay();
+
         }
     }
 
@@ -272,26 +273,34 @@ public class AudioSeekManager : MonoBehaviour
 
                     audioSources[0].volume = volume[0]; // left
                     audioSources[1].volume = volume[1]; // right
-                    
-
-
 
                     track_delay *= time_difference_slider.value;
-                    if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay) {
+                    float ear_diff = audioSources[1].time - audioSources[0].time;
+                    if (Mathf.Abs(track_delay - ear_diff) < (1.0 / 32.0f))
+                    {
                         //Debug.Log ("Updated delay");
                         //Debug.Log (track_delay);
-                        audioSources[0].time = audioSources[0].time;
-                        audioSources[1].time = audioSources[0].time;
-                        if (track_delay < 0)
+
+                        float delay_diff = track_delay - ear_diff;
+                        float pitch_multiplier = Mathf.Abs(delay_diff) / 2.0f / Time.deltaTime;
+                        if (delay_diff < 0)
                         {
-                            audioSources[0].time += Mathf.Abs(track_delay);
+                            audioSources[0].pitch = 1 + pitch_multiplier;
+                            audioSources[1].pitch = 1 - pitch_multiplier;
                         }
                         else
                         {
-                            audioSources[1].time += Mathf.Abs(track_delay);
+                            audioSources[0].pitch = 1 - pitch_multiplier;
+                            audioSources[1].pitch = 1 + pitch_multiplier;
                         }
-                        prev_itd[instr] = track_delay; 
+                        prev_itd[instr] = track_delay;
                     }
+                    else
+                    {
+                        audioSources[0].pitch = 1.0f;
+                        audioSources[1].pitch = 1.0f;
+                    }
+                    //Debug.Log(ear_diff);
 
                 }
             }
@@ -306,7 +315,7 @@ public class AudioSeekManager : MonoBehaviour
                 //Debug.Log("Pause Song");
                 audioSource_left.Stop();
                 audioSource_right.Stop();
-                currentTime = audioSource_left.time;
+                currentTime = (audioSource_left.time + audioSource_right.time) / 2.0f;
             }
         }
     }
