@@ -16,6 +16,7 @@ public class AudioSeekManager : MonoBehaviour
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
     private float replay_interval = 0.1f;        // how long before we replay song
     private Dictionary <string, float> prev_itd;
+    private Dictionary<string, float> prev_instrument_delay;
     private float min_dif_delay = 0.0001f;
 
     private Slider level_difference_slider;
@@ -30,6 +31,7 @@ public class AudioSeekManager : MonoBehaviour
     void Awake()
     {
         prev_itd = new Dictionary <string, float> ();
+        prev_instrument_delay = new Dictionary<string, float>();
 
         level_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Level_Difference")[0].GetComponent<Slider>();
         time_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Time_Difference")[0].GetComponent<Slider>();
@@ -38,6 +40,7 @@ public class AudioSeekManager : MonoBehaviour
         foreach (string instr in instrument_names)  
         {
             prev_itd[instr] = 0.0f;
+            prev_instrument_delay[instr] = 0.0f;
         }
 
         // First we check if there are any other instances conflicting
@@ -66,12 +69,12 @@ public class AudioSeekManager : MonoBehaviour
             currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
             //Debug.Log("The current time is updated");
             interval_tracker += Time.deltaTime;
-            /*if (interval_tracker > replay_interval)
+            if (interval_tracker > replay_interval)
             {
                 updateSongDelay();
                 interval_tracker = 0.0f;
-            }*/
-            updateSongDelay();
+            }
+            //updateSongDelay();
 
         }
     }
@@ -247,6 +250,24 @@ public class AudioSeekManager : MonoBehaviour
             Vector3 camera_direction = Camera.main.transform.forward;
             Vector3 camera_position = Camera.main.transform.position;
 
+            GameObject closest_instrument = null;
+            float closest_distance = -1.0f;
+            foreach (string instr in instrument_names)
+            {
+                if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+                {
+                    GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
+
+                    float instrument_distance = Vector3.Distance(instrumentObject.transform.position, camera_position);
+                    if (closest_distance == -1.0f || instrument_distance < closest_distance)
+                    {
+                        closest_instrument = instrumentObject;
+                        closest_distance = instrument_distance;
+                    }
+                    
+                }
+            }
+
             foreach (string instr in instrument_names) {
                 if (GameObject.FindGameObjectsWithTag(instr).Length != 0) {
                     GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
@@ -275,6 +296,41 @@ public class AudioSeekManager : MonoBehaviour
                     audioSources[1].volume = volume[1]; // right
 
                     track_delay *= time_difference_slider.value;
+
+                    // Closest's instruments time
+                    AudioSource[] closest_audiosource = closest_instrument.GetComponents<AudioSource>();
+                    float closest_instrument_time = (closest_audiosource[0].time + closest_audiosource[1].time) / 2.0f;
+
+                    // Distance between current instrument and closest instrument.
+                    float distance_difference = Mathf.Abs(closest_distance - Vector3.Distance(instrumentObject.transform.position, camera_position));
+                    float delay_between_instruments = distance_difference / 343;
+
+                    if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay || Mathf.Abs(delay_between_instruments - prev_instrument_delay[instr]) > min_dif_delay)
+                    {
+                        //Debug.Log ("Updated delay");
+                        //Debug.Log (track_delay);
+
+                        float left_ear = closest_instrument_time + delay_between_instruments;
+                        float right_ear = closest_instrument_time + delay_between_instruments;
+                        if (track_delay < 0)
+                        {
+                            left_ear += Mathf.Abs(track_delay) / 2.0f;
+                            right_ear -= Mathf.Abs(track_delay) / 2.0f;
+                        }
+                        else
+                        {
+                            left_ear -= Mathf.Abs(track_delay) / 2.0f;
+                            right_ear += Mathf.Abs(track_delay) / 2.0f;
+                        }
+
+                        audioSources[0].time = left_ear;
+                        audioSources[1].time = right_ear;
+                        prev_itd[instr] = track_delay;
+                        prev_instrument_delay[instr] = delay_between_instruments;
+                    }
+
+
+                    /*track_delay *= time_difference_slider.value;
                     float ear_diff = audioSources[1].time - audioSources[0].time;
                     if (Mathf.Abs(track_delay - ear_diff) < (1.0 / 32.0f))
                     {
@@ -299,7 +355,7 @@ public class AudioSeekManager : MonoBehaviour
                     {
                         audioSources[0].pitch = 1.0f;
                         audioSources[1].pitch = 1.0f;
-                    }
+                    }*/
                     //Debug.Log(ear_diff);
 
                 }
