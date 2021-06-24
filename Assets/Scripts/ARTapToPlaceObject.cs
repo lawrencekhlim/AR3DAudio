@@ -74,8 +74,8 @@ public class ARTapToPlaceObject : MonoBehaviour
                 return false;
             }
 
-            Debug.Log("I sense a touch");
-            Debug.Log(touchPosition);
+            //Log("I sense a touch");
+            //Debug.Log(touchPosition);
             return true;
         }
         touchPosition = default;
@@ -118,7 +118,7 @@ public class ARTapToPlaceObject : MonoBehaviour
 
         string instrument = buttonManagerScript.selectedInstrument;
 
-        if (instrument != null)
+        if (!instrument.Equals(""))
         {
             float newSize = objectScale[instrument] * object_scale_slider.value;
             if (spawnedObjects[instrument] != null) {
@@ -131,7 +131,7 @@ public class ARTapToPlaceObject : MonoBehaviour
             if(buttonManagerScript.delete == 1)
             {
                 // Debug.Log("About to delete");
-                if (instrument == null)
+                if (instrument.Equals(""))
                     return;
 
                 if (spawnedObjects[instrument] != null)
@@ -147,17 +147,18 @@ public class ARTapToPlaceObject : MonoBehaviour
         if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
+            Debug.Log (hits);
 
 
-            if (instrument == null)
+            if (instrument.Equals(""))
                 return;
 
             if (spawnedObjects[instrument] == null)
             {
                 spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
                 //string tag;
-                Debug.Log(instrument);
-                Debug.Log(dropdownManagerScript.song);
+                //Debug.Log(instrument);
+                //Debug.Log(dropdownManagerScript.song);
 
 
                 AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);

@@ -8,7 +8,7 @@ public class ButtonManager : MonoBehaviour
 {
     Camera m_MainCamera;
     private bool isClicked = false;
-    public string selectedInstrument = null;
+    public string selectedInstrument = "";
     private GameObject selectedObject = null;
     public int delete = 0;
     public int play_pause_button_state = 1; // 0 is showing pause (currently playing), 1 is showing play (currently paused)
@@ -102,7 +102,7 @@ public class ButtonManager : MonoBehaviour
                     }
                     else
                     {
-                        selectedInstrument = null;
+                        selectedInstrument = "";
                     }
 
                     Debug.Log(selectedInstrument);
