@@ -13,13 +13,14 @@ using UnityEngine.EventSystems;
 public class ARTapToPlaceObject : MonoBehaviour
 {
     Camera m_MainCamera;
-    public GameObject gameObjectToInstantiate;
 
     public GameObject pianoObjectToInstantiate;
     public GameObject drumObjectToInstantiate;
     public GameObject bassObjectToInstantiate;
     public GameObject vocalObjectToInstantiate;
     public GameObject miscObjectToInstantiate;
+
+    public GameObject echoObjectsToInstantiate;
 
     public Dictionary<string, GameObject> spawnedObjects =
         new Dictionary<string, GameObject>(){
@@ -30,6 +31,8 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Misc", null},
         };
 
+    public Dictionary<TrackableId, Dictionary<string, GameObject>> echoObjects; // AR plane ID first, then instrument
+
     public Dictionary<string, float> objectScale =
         new Dictionary<string, float>(){
             {"Piano", 0.45f},
@@ -37,6 +40,15 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Bass", 0.3f},
             {"Vocal", 0.1f},
             {"Misc", 0.025f},
+        };
+
+    public Dictionary <string, string> instrument_names = 
+        new Dictionary <string, string>(){ 
+            {"Instrument1", "Bass"}, 
+            {"Instrument2", "Piano"}, 
+            {"Instrument3", "Drum"}, 
+            {"Instrument4", "Vocal"}, 
+            {"Instrument5", "Misc"} 
         };
 
     public ButtonManager buttonManagerScript;
@@ -61,8 +73,21 @@ public class ARTapToPlaceObject : MonoBehaviour
         pitchBendMixer = Resources.Load<AudioMixer>("AudioMixer/TrackMixer");
         object_scale_slider = GameObject.FindGameObjectsWithTag("Slider_Object_Scaling")[0].GetComponent<Slider>();
         _arRaycastManager = GetComponent<ARRaycastManager>();
+        echoObjects = new Dictionary<TrackableId, Dictionary<string, GameObject>>();
     }
 
+
+    
+    void UpdateEchoes (string planeId, string instr)
+    {
+        UnityEngine.XR.ARFoundation.ARPlaneManager planeManager = GetComponent<UnityEngine.XR.ARFoundation.ARPlaneManager>();
+        foreach (var plane in planeManager.trackables)
+        {
+            Debug.Log(plane.transform.position);
+            Debug.Log(plane.infinitePlane);
+        }
+        Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString());
+    }
 
     bool TryGetTouchPosition (out Vector2 touchPosition)
     {
@@ -126,12 +151,15 @@ public class ARTapToPlaceObject : MonoBehaviour
             }
         }
 
+        /*
         UnityEngine.XR.ARFoundation.ARPlaneManager planeManager = GetComponent<UnityEngine.XR.ARFoundation.ARPlaneManager>();
         foreach (var plane in planeManager.trackables)
         {
             Debug.Log(plane.transform.position);
+            Debug.Log(plane.infinitePlane);
         }
-        Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString()1);
+        Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString());
+        */
 
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
@@ -156,7 +184,8 @@ public class ARTapToPlaceObject : MonoBehaviour
             var hitPose = hits[0].pose;
             Debug.Log (hits);
 
-
+            Debug.Log ("Hitpose");
+            Debug.Log (hitPose);
             if (instrument.Equals(""))
                 return;
 
@@ -166,8 +195,6 @@ public class ARTapToPlaceObject : MonoBehaviour
                 //string tag;
                 //Debug.Log(instrument);
                 //Debug.Log(dropdownManagerScript.song);
-
-
                 AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
                 AudioSeekManager.Instance.playSong();
                 
@@ -176,6 +203,46 @@ public class ARTapToPlaceObject : MonoBehaviour
             {
                 spawnedObjects[instrument].transform.position = hitPose.position;
             }
+
+            UnityEngine.XR.ARFoundation.ARPlaneManager planeManager = GetComponent<UnityEngine.XR.ARFoundation.ARPlaneManager>();
+            foreach (var plane in planeManager.trackables)
+            {
+                var planeId = plane.trackableId;
+                if (!echoObjects.ContainsKey (planeId)) {
+                    echoObjects.Add (planeId, new Dictionary<string, GameObject>());
+                }
+                foreach (string instr in instrument_names.Keys)
+                {
+                    if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instrument_names[instr]] != null) {
+                        echoObjects[planeId].Add(instr, Instantiate (echoObjectsToInstantiate));
+                        echoObjects[planeId][instr].tag = instr;
+                    }
+                }
+            }
+
+            foreach (TrackableId planeId in echoObjects.Keys)
+            {
+                var plane = planeManager.GetPlane(planeId);
+                var infPlane = plane.infinitePlane;
+                foreach (string instr in echoObjects[planeId].Keys) 
+                {
+                    var pos = spawnedObjects[instrument_names[instr]].transform.position;
+                    Vector3 closestPoint = infPlane.ClosestPointOnPlane(pos);
+                    //float distanceToPoint = infPlane.GetDistanceToPoint(hitPose);
+                    var newPoint = pos+ 2 * (closestPoint - pos);
+                    /*
+                    Debug.Log ("newPoint");
+                    Debug.Log (newPoint);
+                    Debug.Log ("closestPoint");
+                    Debug.Log (closestPoint);
+                    Debug.Log ("hitPose.position");
+                    Debug.Log (pos);       */
+                    echoObjects[planeId][instr].transform.position = newPoint;
+                    Debug.Log ("Inside double for loop");
+                }
+                
+            }
+            //Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString());
 
         }
         

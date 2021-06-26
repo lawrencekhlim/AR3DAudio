@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlanePrefab: {fileID: 282718454647342875, guid: bbfa46ccddaf14146ad4cfcf45214888, type: 3}
-  m_DetectionMode: 1
+  m_DetectionMode: -1
 --- !u!114 &101794943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,12 +709,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0cefc717cf48d4f95e334beae8d857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectToInstantiate: {fileID: 1070877205425658, guid: 3a66a51b61f1741fb97d208ff033f09c, type: 3}
   pianoObjectToInstantiate: {fileID: 277755553968272303, guid: 3785f0f375e404bbeaadb8805bfdec81, type: 3}
   drumObjectToInstantiate: {fileID: 1647886929814350, guid: c77c542a832f74bf5a102ae3eb96e1da, type: 3}
   bassObjectToInstantiate: {fileID: 4950904622492070049, guid: f266295669b754f1e99de918a2992759, type: 3}
   vocalObjectToInstantiate: {fileID: 1968255796681142, guid: 91d62156e677542d0a94c89e8335a8ea, type: 3}
   miscObjectToInstantiate: {fileID: 1726839335285724, guid: 5e0cb889e94184e8ba33cf9bbac62a65, type: 3}
+  echoObjectsToInstantiate: {fileID: 8323085072338797141, guid: 3d0a99c0a6efe47cba090f5fcade7619, type: 3}
   buttonManagerScript: {fileID: 964670527}
   dropdownManagerScript: {fileID: 820241203}
 --- !u!114 &101794944

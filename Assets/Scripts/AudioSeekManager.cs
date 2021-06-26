@@ -191,9 +191,9 @@ public class AudioSeekManager : MonoBehaviour
         {
             foreach (string instr in instrument_names)
             {
-                if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+                GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
+                foreach (GameObject instrumentObject in instrumentObjects)
                 {
-                    GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
 
                     audioSources[0].Play();
@@ -209,23 +209,23 @@ public class AudioSeekManager : MonoBehaviour
     public void setTracks (string song) {
         var clip = Resources.Load(song) as AudioClip;
 
-        string[] instrument_names = new string[] { "bass", "piano", "drums", "vocals", "other" };
+        string[] instrument_types = new string[] { "bass", "piano", "drums", "vocals", "other" }; // For the filenames of the left/right audio sources
         for(int i=0; i < 5; i++)
         {
-            string instrument_tag = "Instrument" + (i+1).ToString();
-            string instrument_name = instrument_names[i];
+            string instr = instrument_names[i];
+            string instrument_type = instrument_types[i];
 
-            Debug.Log ("Before FindGameObjectsWithTag");
-
-            if (GameObject.FindGameObjectsWithTag(instrument_tag).Length != 0)
+            //Debug.Log ("Before FindGameObjectsWithTag");
+            GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
+            foreach (GameObject instrumentObject in instrumentObjects) 
             {
-                AudioSource audio_left = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[0];
-                AudioSource audio_right = GameObject.FindGameObjectWithTag(instrument_tag).GetComponents<AudioSource>()[1];
+                AudioSource audio_left = instrumentObject.GetComponents<AudioSource>()[0];
+                AudioSource audio_right = instrumentObject.GetComponents<AudioSource>()[1];
                 audio_left.Pause();
                 audio_right.Pause();
 
-                audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_left") as AudioClip;
-                audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_name + "_right") as AudioClip;
+                audio_left.clip = Resources.Load("allOutput/" + song + "/" + instrument_type + "_left") as AudioClip;
+                audio_right.clip = Resources.Load("allOutput/" + song + "/" + instrument_type + "_right") as AudioClip;
 
                 Debug.Log(audio_left.ToString());
                 Debug.Log(audio_right.ToString());
@@ -254,10 +254,9 @@ public class AudioSeekManager : MonoBehaviour
             float closest_distance = -1.0f;
             foreach (string instr in instrument_names)
             {
-                if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+                GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
+                foreach (GameObject instrumentObject in instrumentObjects) 
                 {
-                    GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
-
                     float instrument_distance = Vector3.Distance(instrumentObject.transform.position, camera_position);
                     if (closest_distance == -1.0f || instrument_distance < closest_distance)
                     {
@@ -269,8 +268,9 @@ public class AudioSeekManager : MonoBehaviour
             }
 
             foreach (string instr in instrument_names) {
-                if (GameObject.FindGameObjectsWithTag(instr).Length != 0) {
-                    GameObject instrumentObject = GameObject.FindGameObjectWithTag(instr);
+                GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
+                foreach (GameObject instrumentObject in instrumentObjects) 
+                {
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
                     Vector3 instrument_position = instrumentObject.transform.position;
                     //Debug.Log(instr);
@@ -365,9 +365,11 @@ public class AudioSeekManager : MonoBehaviour
 
     public void pauseSong() {
         foreach (string instr in instrument_names) {
-            if (GameObject.FindGameObjectsWithTag(instr).Length != 0) {
-                AudioSource audioSource_left = GameObject.FindGameObjectWithTag(instr).GetComponents<AudioSource>()[0];
-                AudioSource audioSource_right = GameObject.FindGameObjectWithTag(instr).GetComponents<AudioSource>()[1];
+            GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
+            foreach (GameObject instrumentObject in instrumentObjects) 
+            {
+                AudioSource audioSource_left = instrumentObject.GetComponents<AudioSource>()[0];
+                AudioSource audioSource_right = instrumentObject.GetComponents<AudioSource>()[1];
                 //Debug.Log("Pause Song");
                 audioSource_left.Stop();
                 audioSource_right.Stop();
