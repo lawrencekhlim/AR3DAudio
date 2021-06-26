@@ -21,6 +21,7 @@ public class AudioSeekManager : MonoBehaviour
     private Slider level_difference_slider;
     private Slider time_difference_slider;
     private Slider distance_difference_slider;
+    private Slider echo_dampening_slider;
 
     private int frame_counter = 0;
 
@@ -34,6 +35,7 @@ public class AudioSeekManager : MonoBehaviour
         level_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Level_Difference")[0].GetComponent<Slider>();
         time_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Time_Difference")[0].GetComponent<Slider>();
         distance_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
+        echo_dampening_slider = GameObject.FindGameObjectsWithTag("Slider_Echo_Dampening")[0].GetComponent<Slider>();
 
         // First we check if there are any other instances conflicting
         if(Instance != null && Instance != this)
@@ -295,7 +297,7 @@ public class AudioSeekManager : MonoBehaviour
                     Debug.Log("Before If statement");
                     //Debug.Log (track_delay);
 
-                    float echoDampen = 0.1f;
+                    float echoDampen = echo_dampening_slider.value;
                     float [] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
 
                     if (instrumentObject.tag == instr)

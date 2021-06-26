@@ -186,6 +186,9 @@ public class ARTapToPlaceObject : MonoBehaviour
 
             Debug.Log ("Hitpose");
             Debug.Log (hitPose);
+
+            bool newObjectAdded = false;
+
             if (instrument.Equals(""))
                 return;
 
@@ -194,10 +197,8 @@ public class ARTapToPlaceObject : MonoBehaviour
                 spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
                 //string tag;
                 //Debug.Log(instrument);
-                //Debug.Log(dropdownManagerScript.song);
-                AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);
-                AudioSeekManager.Instance.playSong();
-                
+                //Debug.Log(dropdownManagerScript.song);  
+                newObjectAdded = true;          
             }
             else
             {
@@ -216,6 +217,8 @@ public class ARTapToPlaceObject : MonoBehaviour
                     if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instrument_names[instr]] != null) {
                         echoObjects[planeId].Add(instr, Instantiate (echoObjectsToInstantiate));
                         echoObjects[planeId][instr].tag = instr + "_echo";
+                        Debug.Log (echoObjects[planeId][instr].tag);
+                        newObjectAdded = true;
                     }
                 }
             }
@@ -243,7 +246,11 @@ public class ARTapToPlaceObject : MonoBehaviour
                 
             }
             //Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString());
-
+            if (newObjectAdded)
+            {
+                AudioSeekManager.Instance.setTracks (dropdownManagerScript.song);   
+                AudioSeekManager.Instance.playSong(); 
+            }
         }
         
     }

@@ -9,11 +9,16 @@ TagManager:
   - Instrument3
   - Instrument4
   - Instrument5
-  - test
   - Slider_Level_Difference
   - Slider_Time_Difference
   - Slider_Distance_Difference
   - Slider_Object_Scaling
+  - Instrument1_echo
+  - Instrument2_echo
+  - Instrument3_echo
+  - Instrument4_echo
+  - Instrument5_echo
+  - Slider_Echo_Dampening
   layers:
   - Default
   - TransparentFX
