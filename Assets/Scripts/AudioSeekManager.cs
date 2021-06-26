@@ -22,6 +22,7 @@ public class AudioSeekManager : MonoBehaviour
     private Slider time_difference_slider;
     private Slider distance_difference_slider;
     private Slider echo_dampening_slider;
+    private Slider between_instrument_time_slider;
 
     private int frame_counter = 0;
 
@@ -36,6 +37,7 @@ public class AudioSeekManager : MonoBehaviour
         time_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Time_Difference")[0].GetComponent<Slider>();
         distance_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
         echo_dampening_slider = GameObject.FindGameObjectsWithTag("Slider_Echo_Dampening")[0].GetComponent<Slider>();
+        between_instrument_time_slider = GameObject.FindGameObjectsWithTag("Slider_Between_Instrument_Time")[0].GetComponent<Slider>();
 
         // First we check if there are any other instances conflicting
         if(Instance != null && Instance != this)
@@ -317,7 +319,7 @@ public class AudioSeekManager : MonoBehaviour
 
                     // Distance between current instrument and closest instrument.
                     float distance_difference = Mathf.Abs(closest_distance - Vector3.Distance(instrumentObject.transform.position, camera_position));
-                    float delay_between_instruments = distance_difference / 343;
+                    float delay_between_instruments = distance_difference / 343 * between_instrument_time_slider.value;
 
                     // Get prev_itd and prev_instrument_delay
                     float current_instrument_time = (audioSources[0].time + audioSources[1].time) / 2.0f;
