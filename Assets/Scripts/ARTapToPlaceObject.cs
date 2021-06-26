@@ -126,6 +126,13 @@ public class ARTapToPlaceObject : MonoBehaviour
             }
         }
 
+        UnityEngine.XR.ARFoundation.ARPlaneManager planeManager = GetComponent<UnityEngine.XR.ARFoundation.ARPlaneManager>();
+        foreach (var plane in planeManager.trackables)
+        {
+            Debug.Log(plane.transform.position);
+        }
+        Debug.Log("Number of trackables: " + planeManager.trackables.count.ToString()1);
+
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
             if(buttonManagerScript.delete == 1)
