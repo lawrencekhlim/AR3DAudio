@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class AudioSeekManager : MonoBehaviour
 {
@@ -15,14 +16,13 @@ public class AudioSeekManager : MonoBehaviour
 
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
     private float replay_interval = 0.1f;        // how long before we replay song
-    private Dictionary <string, float> prev_itd;
-    private Dictionary<string, float> prev_instrument_delay;
     private float min_dif_delay = 0.0001f;
 
     private Slider level_difference_slider;
     private Slider time_difference_slider;
     private Slider distance_difference_slider;
 
+    private int frame_counter = 0;
 
 
     // Static singleton property
@@ -30,18 +30,10 @@ public class AudioSeekManager : MonoBehaviour
      
     void Awake()
     {
-        prev_itd = new Dictionary <string, float> ();
-        prev_instrument_delay = new Dictionary<string, float>();
 
         level_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Level_Difference")[0].GetComponent<Slider>();
         time_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Time_Difference")[0].GetComponent<Slider>();
         distance_difference_slider = GameObject.FindGameObjectsWithTag("Slider_Distance_Difference")[0].GetComponent<Slider>();
-
-        foreach (string instr in instrument_names)  
-        {
-            prev_itd[instr] = 0.0f;
-            prev_instrument_delay[instr] = 0.0f;
-        }
 
         // First we check if there are any other instances conflicting
         if(Instance != null && Instance != this)
@@ -192,7 +184,10 @@ public class AudioSeekManager : MonoBehaviour
             foreach (string instr in instrument_names)
             {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
-                foreach (GameObject instrumentObject in instrumentObjects)
+                GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
+                GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
+
+                foreach (GameObject instrumentObject in soundObjects)
                 {
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
 
@@ -217,7 +212,10 @@ public class AudioSeekManager : MonoBehaviour
 
             //Debug.Log ("Before FindGameObjectsWithTag");
             GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
-            foreach (GameObject instrumentObject in instrumentObjects) 
+            GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
+            GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
+
+            foreach (GameObject instrumentObject in soundObjects)
             {
                 AudioSource audio_left = instrumentObject.GetComponents<AudioSource>()[0];
                 AudioSource audio_right = instrumentObject.GetComponents<AudioSource>()[1];
@@ -247,6 +245,8 @@ public class AudioSeekManager : MonoBehaviour
     public void updateSongDelay() {
         if (currentlyPlaying) {
 
+            frame_counter += 1;
+
             Vector3 camera_direction = Camera.main.transform.forward;
             Vector3 camera_position = Camera.main.transform.position;
 
@@ -255,7 +255,10 @@ public class AudioSeekManager : MonoBehaviour
             foreach (string instr in instrument_names)
             {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
-                foreach (GameObject instrumentObject in instrumentObjects) 
+                GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
+                GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
+
+                foreach (GameObject instrumentObject in soundObjects)
                 {
                     float instrument_distance = Vector3.Distance(instrumentObject.transform.position, camera_position);
                     if (closest_distance == -1.0f || instrument_distance < closest_distance)
@@ -269,7 +272,10 @@ public class AudioSeekManager : MonoBehaviour
 
             foreach (string instr in instrument_names) {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
-                foreach (GameObject instrumentObject in instrumentObjects) 
+                GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
+                GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
+
+                foreach (GameObject instrumentObject in soundObjects) 
                 {
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
                     Vector3 instrument_position = instrumentObject.transform.position;
@@ -288,27 +294,38 @@ public class AudioSeekManager : MonoBehaviour
                     float track_delay = calculate_delay(camera_position, instrument_position, camera_direction);
                     Debug.Log("Before If statement");
                     //Debug.Log (track_delay);
-                    //Debug.Log (prev_itd[instr]);
 
+                    float echoDampen = 0.1f;
                     float [] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
 
-                    audioSources[0].volume = volume[0]; // left
-                    audioSources[1].volume = volume[1]; // right
+                    if (instrumentObject.tag == instr)
+                    {
+                        echoDampen = 1.0f;
+                    }
+
+                    audioSources[0].volume = volume[0] * echoDampen; // left
+                    audioSources[1].volume = volume[1] * echoDampen; // right
 
                     track_delay *= time_difference_slider.value;
 
                     // Closest's instruments time
                     AudioSource[] closest_audiosource = closest_instrument.GetComponents<AudioSource>();
                     float closest_instrument_time = (closest_audiosource[0].time + closest_audiosource[1].time) / 2.0f;
+                    
 
                     // Distance between current instrument and closest instrument.
                     float distance_difference = Mathf.Abs(closest_distance - Vector3.Distance(instrumentObject.transform.position, camera_position));
                     float delay_between_instruments = distance_difference / 343;
 
-                    if (Mathf.Abs(track_delay - prev_itd[instr]) > min_dif_delay || Mathf.Abs(delay_between_instruments - prev_instrument_delay[instr]) > min_dif_delay)
+                    // Get prev_itd and prev_instrument_delay
+                    float current_instrument_time = (audioSources[0].time + audioSources[1].time) / 2.0f;
+                    float prev_instrument_delay = current_instrument_time - closest_instrument_time;
+
+                    float prev_itd = audioSources[1].time - audioSources[0].time;
+
+                    if (Mathf.Abs(track_delay - prev_itd) > min_dif_delay || Mathf.Abs(delay_between_instruments - prev_instrument_delay) > min_dif_delay)
                     {
                         //Debug.Log ("Updated delay");
-                        //Debug.Log (track_delay);
 
                         float left_ear = closest_instrument_time + delay_between_instruments;
                         float right_ear = closest_instrument_time + delay_between_instruments;
@@ -325,9 +342,12 @@ public class AudioSeekManager : MonoBehaviour
 
                         audioSources[0].time = left_ear;
                         audioSources[1].time = right_ear;
-                        prev_itd[instr] = track_delay;
-                        prev_instrument_delay[instr] = delay_between_instruments;
                     }
+                    Debug.Log("DELAY NUMBERS: " + frame_counter.ToString());
+                    Debug.Log("track delay: " + track_delay.ToString());
+                    Debug.Log("prev_itd: " + prev_itd.ToString());
+                    Debug.Log("delay_between_instruments: " + delay_between_instruments.ToString());
+                    Debug.Log("prev_instrument_delay: " + prev_instrument_delay.ToString());
 
 
                     /*track_delay *= time_difference_slider.value;
@@ -366,7 +386,10 @@ public class AudioSeekManager : MonoBehaviour
     public void pauseSong() {
         foreach (string instr in instrument_names) {
             GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
-            foreach (GameObject instrumentObject in instrumentObjects) 
+            GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
+            GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
+
+            foreach (GameObject instrumentObject in soundObjects) 
             {
                 AudioSource audioSource_left = instrumentObject.GetComponents<AudioSource>()[0];
                 AudioSource audioSource_right = instrumentObject.GetComponents<AudioSource>()[1];

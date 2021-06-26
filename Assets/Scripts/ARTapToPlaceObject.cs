@@ -215,7 +215,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                 {
                     if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instrument_names[instr]] != null) {
                         echoObjects[planeId].Add(instr, Instantiate (echoObjectsToInstantiate));
-                        echoObjects[planeId][instr].tag = instr;
+                        echoObjects[planeId][instr].tag = instr + "_echo";
                     }
                 }
             }
