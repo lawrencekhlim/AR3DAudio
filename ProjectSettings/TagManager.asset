@@ -20,6 +20,7 @@ TagManager:
   - Instrument5_echo
   - Slider_Echo_Dampening
   - Slider_Between_Instrument_Time
+  - Playing_Note
   layers:
   - Default
   - TransparentFX

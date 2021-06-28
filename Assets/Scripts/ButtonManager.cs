@@ -66,12 +66,18 @@ public class ButtonManager : MonoBehaviour
                         if (AudioSeekManager.Instance.placedInstrument()) {
                             AudioSeekManager.Instance.playSong();
                         }
+
+                        // TODO: make all objects with playing_note tag have a visible material
+
                     }
                     else {
                         EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text = "Play";
                         play_pause_button_state = 1;
                         AudioSeekManager.Instance.setPlay (false);
                         AudioSeekManager.Instance.pauseSong();
+
+
+                        // TODO: make all objects with playing_note tag have invisible material
                     }
                 }
                 else
