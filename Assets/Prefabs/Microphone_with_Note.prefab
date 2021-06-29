@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9315848}
   m_Layer: 0
   m_Name: note2
-  m_TagString: Untagged
+  m_TagString: Playing_Note
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1392280820}
   m_Layer: 0
   m_Name: NoteParent
-  m_TagString: Playing_Note
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

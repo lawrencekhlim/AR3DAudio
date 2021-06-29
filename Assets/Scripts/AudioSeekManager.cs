@@ -202,6 +202,14 @@ public class AudioSeekManager : MonoBehaviour
                     audioSources[1].time = currentTime;
                 }
             }
+
+            //  make all objects with playing_note tag have a visible material
+            GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
+            foreach (GameObject NoteObject in NoteObjects)
+            {
+                //NoteObject.GetComponent<MeshRenderer>().material = note_material;
+                NoteObject.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 
@@ -403,6 +411,14 @@ public class AudioSeekManager : MonoBehaviour
                 currentTime = (audioSource_left.time + audioSource_right.time) / 2.0f;
             }
         }
+
+        // make all objects with playing_note tag have invisible material
+        GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
+        foreach (GameObject NoteObject in NoteObjects) {
+            //NoteObject.GetComponent<MeshRenderer>().material = invisible_material;
+            NoteObject.GetComponent<MeshRenderer>().enabled = true;
+        }
+        
     }
 
 
