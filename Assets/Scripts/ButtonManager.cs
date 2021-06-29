@@ -67,7 +67,7 @@ public class ButtonManager : MonoBehaviour
                             AudioSeekManager.Instance.playSong();
                         }
 
-                        // TODO: make all objects with playing_note tag have a visible material
+                        
 
                     }
                     else {
@@ -77,7 +77,6 @@ public class ButtonManager : MonoBehaviour
                         AudioSeekManager.Instance.pauseSong();
 
 
-                        // TODO: make all objects with playing_note tag have invisible material
                     }
                 }
                 else
