@@ -13,10 +13,39 @@ public class ButtonManager : MonoBehaviour
     public int delete = 0;
     public int play_pause_button_state = 1; // 0 is showing pause (currently playing), 1 is showing play (currently paused)
     public bool togglePitchOn = false;
-    
+    public GameObject Panel;
+
+
+    private bool isPanelActive = false;
+    private float timeElapsed = 0.0f;
+    private float lerpDuration = 1.0f;
+    private Vector3 panelActive = new Vector3(0, 0, 0);
+    private Vector3 panelDisabled = new Vector3(0, -900, 0);
+
     public void Hello()
     {
         isClicked = true;
+    }
+
+    public void Awake()
+    {
+        //Panel.SetActive(false);
+    }
+
+    public void togglePanel()
+    {
+        if (Panel != null)
+        {
+            if (isPanelActive)
+            {
+                //Panel.GetComponent<RectTransform>().position = new Vector3(0, -900, 0f);
+                isPanelActive = !isPanelActive;
+            } else
+            {
+                //Panel.GetComponent<RectTransform>().position = new Vector3(0, 0, 0f);
+                isPanelActive = !isPanelActive;
+            }
+        }
     }
 
     public void togglePitchSetting()
@@ -42,6 +71,27 @@ public class ButtonManager : MonoBehaviour
 
     void Update()
     {
+        // Animation for panel moving up and down
+        if (isPanelActive)
+        {
+            if (timeElapsed < lerpDuration)
+            {
+                Panel.GetComponent<RectTransform>().position = Vector3.Lerp(panelDisabled, panelActive, timeElapsed / lerpDuration);
+                timeElapsed += Time.deltaTime;
+            }
+            Debug.Log("Panel ACtive");
+            Debug.Log(timeElapsed);
+        } else
+        {
+            if (timeElapsed > 0)
+            {
+                Panel.GetComponent<RectTransform>().position = Vector3.Lerp(panelDisabled, panelActive, timeElapsed / lerpDuration);
+                timeElapsed -= Time.deltaTime;
+                Debug.Log("Panel Disabled");
+                Debug.Log(timeElapsed);
+            }
+        }
+
         if (isClicked == true)
         {
             if (EventSystem.current.currentSelectedGameObject != null)
