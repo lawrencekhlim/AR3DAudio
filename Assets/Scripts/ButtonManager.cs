@@ -20,7 +20,7 @@ public class ButtonManager : MonoBehaviour
     private float timeElapsed = 0.0f;
     private float lerpDuration = 1.0f;
     private Vector3 panelActive = new Vector3(0, 0, 0);
-    private Vector3 panelDisabled = new Vector3(0, -900, 0);
+    private Vector3 panelDisabled = new Vector3(0, -1200, 0);
 
     public void Hello()
     {
