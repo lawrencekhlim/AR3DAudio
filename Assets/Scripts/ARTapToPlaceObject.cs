@@ -67,6 +67,8 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     private Slider object_scale_slider;
 
+    private int counter_after_touch = 0;
+
     void Awake()
     {
         m_MainCamera = Camera.main;
@@ -93,7 +95,7 @@ public class ARTapToPlaceObject : MonoBehaviour
     {
         if (Input.touchCount > 0) {
 
-            Debug.Log("THERE IS MORE THAN 0 TOUCHES");
+            //Debug.Log("THERE IS MORE THAN 0 TOUCHES");
             
             Touch touch = Input.GetTouch(0);
             touchPosition = touch.position;
@@ -101,15 +103,18 @@ public class ARTapToPlaceObject : MonoBehaviour
 
             if (EventSystem.current.IsPointerOverGameObject(touchId))
             {
-                Debug.Log("touch is over an ui object");
+                counter_after_touch = 0;
+                //Debug.Log("touch is over an ui object");
                 touchPosition = default;
                 return false;
             }
 
-           /* if (touchPosition.y > Screen.height * 0.8 || touchPosition.y < Screen.height*0.15){
+            if (counter_after_touch < 2) {
+                //Debug.Log("waiting a few frames");
                 touchPosition = default;
+                counter_after_touch += 1;
                 return false;
-            }*/
+            }
 
             //Log("I sense a touch");
             //Debug.Log(touchPosition);
@@ -191,6 +196,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                     {
                         Destroy(echoObjects[planeID][instrument]);
                         echoObjects[planeID].Remove(instrument);
+                        // I still see echo objects on the screen.
                     }
                 }
                 buttonManagerScript.delete = 0;
