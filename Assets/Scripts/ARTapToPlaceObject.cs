@@ -185,6 +185,13 @@ public class ARTapToPlaceObject : MonoBehaviour
                 {
                     Destroy(spawnedObjects[instrument]);
                     spawnedObjects[instrument] = null;
+
+
+                    foreach (var planeID in echoObjects.Keys)
+                    {
+                        Destroy(echoObjects[planeID][instrument]);
+                        echoObjects[planeID].Remove(instrument);
+                    }
                 }
                 buttonManagerScript.delete = 0;
             }
