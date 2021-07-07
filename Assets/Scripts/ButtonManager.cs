@@ -79,16 +79,16 @@ public class ButtonManager : MonoBehaviour
                 Panel.GetComponent<RectTransform>().position = Vector3.Lerp(panelDisabled, panelActive, timeElapsed / lerpDuration);
                 timeElapsed += Time.deltaTime;
             }
-            Debug.Log("Panel ACtive");
-            Debug.Log(timeElapsed);
+            //Debug.Log("Panel ACtive");
+            //Debug.Log(timeElapsed);
         } else
         {
             if (timeElapsed > 0)
             {
                 Panel.GetComponent<RectTransform>().position = Vector3.Lerp(panelDisabled, panelActive, timeElapsed / lerpDuration);
                 timeElapsed -= Time.deltaTime;
-                Debug.Log("Panel Disabled");
-                Debug.Log(timeElapsed);
+                //Debug.Log("Panel Disabled");
+                //Debug.Log(timeElapsed);
             }
         }
 

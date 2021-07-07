@@ -92,12 +92,24 @@ public class ARTapToPlaceObject : MonoBehaviour
     bool TryGetTouchPosition (out Vector2 touchPosition)
     {
         if (Input.touchCount > 0) {
-            touchPosition = Input.GetTouch(0).position;
 
-            if(touchPosition.y > Screen.height * 0.8 || touchPosition.y < Screen.height*0.15){
+            Debug.Log("THERE IS MORE THAN 0 TOUCHES");
+            
+            Touch touch = Input.GetTouch(0);
+            touchPosition = touch.position;
+            int touchId = touch.fingerId;
+
+            if (EventSystem.current.IsPointerOverGameObject(touchId))
+            {
+                Debug.Log("touch is over an ui object");
                 touchPosition = default;
                 return false;
             }
+
+           /* if (touchPosition.y > Screen.height * 0.8 || touchPosition.y < Screen.height*0.15){
+                touchPosition = default;
+                return false;
+            }*/
 
             //Log("I sense a touch");
             //Debug.Log(touchPosition);
@@ -163,7 +175,7 @@ public class ARTapToPlaceObject : MonoBehaviour
 
         if (!TryGetTouchPosition(out Vector2 touchPosition))
         {
-            if(buttonManagerScript.delete == 1)
+            if (buttonManagerScript.delete == 1)
             {
                 // Debug.Log("About to delete");
                 if (instrument.Equals(""))
@@ -179,6 +191,7 @@ public class ARTapToPlaceObject : MonoBehaviour
             return;
         }
 
+        
         if (_arRaycastManager.Raycast(touchPosition, hits, TrackableType.PlaneWithinPolygon))
         {
             var hitPose = hits[0].pose;
