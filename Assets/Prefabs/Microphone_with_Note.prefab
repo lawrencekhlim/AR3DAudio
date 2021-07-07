@@ -140,6 +140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Microphone_with_Note
       objectReference: {fileID: 0}
+    - target: {fileID: 1968255796681142, guid: 91d62156e677542d0a94c89e8335a8ea, type: 3}
+      propertyPath: m_TagString
+      value: Vocal
+      objectReference: {fileID: 0}
     - target: {fileID: 4583041939341274, guid: 91d62156e677542d0a94c89e8335a8ea, type: 3}
       propertyPath: m_RootOrder
       value: 0

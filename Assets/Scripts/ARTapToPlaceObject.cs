@@ -42,14 +42,14 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Misc", 0.025f},
         };
 
-    public Dictionary <string, string> instrument_names = 
+    /*public Dictionary <string, string> instrument_names = 
         new Dictionary <string, string>(){ 
             {"Instrument1", "Bass"}, 
             {"Instrument2", "Piano"}, 
             {"Instrument3", "Drum"}, 
             {"Instrument4", "Vocal"}, 
             {"Instrument5", "Misc"} 
-        };
+        };*/
 
     public ButtonManager buttonManagerScript;
     public DropdownManager dropdownManagerScript;
@@ -103,6 +103,7 @@ public class ARTapToPlaceObject : MonoBehaviour
             {
                 Debug.Log("touch is over an ui object");
                 touchPosition = default;
+
                 return false;
             }
 
@@ -232,9 +233,9 @@ public class ARTapToPlaceObject : MonoBehaviour
                 if (!echoObjects.ContainsKey (planeId)) {
                     echoObjects.Add (planeId, new Dictionary<string, GameObject>());
                 }
-                foreach (string instr in instrument_names.Keys)
+                foreach (string instr in spawnedObjects.Keys)
                 {
-                    if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instrument_names[instr]] != null) {
+                    if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instr] != null) {
                         echoObjects[planeId].Add(instr, Instantiate (echoObjectsToInstantiate));
                         echoObjects[planeId][instr].tag = instr + "_echo";
                         Debug.Log (echoObjects[planeId][instr].tag);
@@ -249,7 +250,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                 var infPlane = plane.infinitePlane;
                 foreach (string instr in echoObjects[planeId].Keys) 
                 {
-                    var pos = spawnedObjects[instrument_names[instr]].transform.position;
+                    var pos = spawnedObjects[instr].transform.position;
                     Vector3 closestPoint = infPlane.ClosestPointOnPlane(pos);
                     //float distanceToPoint = infPlane.GetDistanceToPoint(hitPose);
                     var newPoint = pos+ 2 * (closestPoint - pos);

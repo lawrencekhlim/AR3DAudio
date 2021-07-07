@@ -140,6 +140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Misc_with_Note
       objectReference: {fileID: 0}
+    - target: {fileID: 1726839335285724, guid: 5e0cb889e94184e8ba33cf9bbac62a65, type: 3}
+      propertyPath: m_TagString
+      value: Misc
+      objectReference: {fileID: 0}
     - target: {fileID: 4821092941748650, guid: 5e0cb889e94184e8ba33cf9bbac62a65, type: 3}
       propertyPath: m_RootOrder
       value: 0

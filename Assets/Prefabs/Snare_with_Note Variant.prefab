@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8454990756862277256}
   m_Layer: 0
   m_Name: Snare_with_Note Variant
-  m_TagString: Instrument3
+  m_TagString: Drum
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

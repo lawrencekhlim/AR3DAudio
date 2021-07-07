@@ -4,23 +4,23 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Instrument1
-  - Instrument2
-  - Instrument3
-  - Instrument4
-  - Instrument5
   - Slider_Level_Difference
   - Slider_Time_Difference
   - Slider_Distance_Difference
   - Slider_Object_Scaling
-  - Instrument1_echo
-  - Instrument2_echo
-  - Instrument3_echo
-  - Instrument4_echo
-  - Instrument5_echo
   - Slider_Echo_Dampening
   - Slider_Between_Instrument_Time
   - Playing_Note
+  - Bass_echo
+  - Drum_echo
+  - Piano_echo
+  - Vocal_echo
+  - Misc_echo
+  - Bass
+  - Piano
+  - Drum
+  - Vocal
+  - Misc
   layers:
   - Default
   - TransparentFX

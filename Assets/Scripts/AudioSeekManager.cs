@@ -12,7 +12,8 @@ public class AudioSeekManager : MonoBehaviour
 
     public bool currentlyPlaying = false;
     public float currentTime = 0;
-    public string [] instrument_names = { "Instrument1", "Instrument2", "Instrument3", "Instrument4", "Instrument5" };
+    public string [] instrument_names2 = { "Bass", "Piano", "Drum", "Vocal", "Misc" };
+
 
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
     private float replay_interval = 0.1f;        // how long before we replay song
@@ -85,7 +86,8 @@ public class AudioSeekManager : MonoBehaviour
 
 
     public bool placedInstrument() {
-        foreach (string instr in instrument_names) {
+        foreach (string instr in instrument_names2) {
+            Debug.Log(instr);
             if (GameObject.FindGameObjectsWithTag(instr).Length != 0) {
                 //Debug.Log ("A instrument is placed.");
                 return true;
@@ -185,7 +187,7 @@ public class AudioSeekManager : MonoBehaviour
     {
         if (currentlyPlaying)
         {
-            foreach (string instr in instrument_names)
+            foreach (string instr in instrument_names2)
             {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
                 GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
@@ -219,7 +221,7 @@ public class AudioSeekManager : MonoBehaviour
         string[] instrument_types = new string[] { "bass", "piano", "drums", "vocals", "other" }; // For the filenames of the left/right audio sources
         for(int i=0; i < 5; i++)
         {
-            string instr = instrument_names[i];
+            string instr = instrument_names2[i];
             string instrument_type = instrument_types[i];
 
             //Debug.Log ("Before FindGameObjectsWithTag");
@@ -264,7 +266,7 @@ public class AudioSeekManager : MonoBehaviour
 
             GameObject closest_instrument = null;
             float closest_distance = -1.0f;
-            foreach (string instr in instrument_names)
+            foreach (string instr in instrument_names2)
             {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
                 GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
@@ -282,7 +284,7 @@ public class AudioSeekManager : MonoBehaviour
                 }
             }
 
-            foreach (string instr in instrument_names) {
+            foreach (string instr in instrument_names2) {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
                 GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
                 GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
@@ -396,7 +398,7 @@ public class AudioSeekManager : MonoBehaviour
     }
 
     public void pauseSong() {
-        foreach (string instr in instrument_names) {
+        foreach (string instr in instrument_names2) {
             GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
             GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
             GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
