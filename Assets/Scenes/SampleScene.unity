@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -749,7 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pianoObjectToInstantiate: {fileID: 277755553968272303, guid: 3785f0f375e404bbeaadb8805bfdec81, type: 3}
   drumObjectToInstantiate: {fileID: 8454990756862277259, guid: aa15d056e635eb74dbc14d43ec7329fd, type: 3}
-  bassObjectToInstantiate: {fileID: 4950904622492070049, guid: f266295669b754f1e99de918a2992759, type: 3}
+  bassObjectToInstantiate: {fileID: 2674963022289553658, guid: 87fd0f2e84e814ff1bff583a75c37946, type: 3}
   vocalObjectToInstantiate: {fileID: 3081405830327046017, guid: 58efbe1a08153384bb300afe21c91b06, type: 3}
   miscObjectToInstantiate: {fileID: 6773460732386371527, guid: 894aebd8a1f16b640aa1d0fbd953a289, type: 3}
   echoObjectsToInstantiate: {fileID: 8323085072338797141, guid: 3d0a99c0a6efe47cba090f5fcade7619, type: 3}
@@ -3771,12 +3771,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentlyPlaying: 0
   currentTime: 0
-  instrument_names:
-  - Instrument1
-  - Instrument2
-  - Instrument3
-  - Instrument4
-  - Instrument5
+  instrument_names2:
+  - Bass
+  - Piano
+  - Drum
+  - Vocal
+  - Misc
 --- !u!4 &1174816544
 Transform:
   m_ObjectHideFlags: 0
@@ -4734,7 +4734,7 @@ GameObject:
   - component: {fileID: 1451573273}
   m_Layer: 5
   m_Name: Button_Toggle_Pitch
-  m_TagString: Untagged
+  m_TagString: Button_Toggle_Tag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
