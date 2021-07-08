@@ -21,6 +21,9 @@ TagManager:
   - Drum
   - Vocal
   - Misc
+  - Button_Toggle_Tag
+  - Instrument4
+  - Instrument5
   layers:
   - Default
   - TransparentFX

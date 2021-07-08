@@ -37,7 +37,7 @@ public class ARTapToPlaceObject : MonoBehaviour
         new Dictionary<string, float>(){
             {"Piano", 0.45f},
             {"Drum", 0.075f},
-            {"Bass", 0.3f},
+            {"Bass", 0.015f},
             {"Vocal", 0.1f},
             {"Misc", 0.025f},
         };
@@ -244,6 +244,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                     if (!echoObjects[planeId].ContainsKey(instr) && spawnedObjects[instr] != null) {
                         echoObjects[planeId].Add(instr, Instantiate (echoObjectsToInstantiate));
                         echoObjects[planeId][instr].tag = instr + "_echo";
+                        echoObjects[planeId][instr].GetComponent<MeshRenderer>().enabled = false;
                         Debug.Log (echoObjects[planeId][instr].tag);
                         newObjectAdded = true;
                     }

@@ -210,7 +210,7 @@ public class AudioSeekManager : MonoBehaviour
             foreach (GameObject NoteObject in NoteObjects)
             {
                 //NoteObject.GetComponent<MeshRenderer>().material = note_material;
-                NoteObject.GetComponent<MeshRenderer>().enabled = false;
+                NoteObject.GetComponent<MeshRenderer>().enabled = true;
             }
         }
     }
@@ -418,7 +418,7 @@ public class AudioSeekManager : MonoBehaviour
         GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
         foreach (GameObject NoteObject in NoteObjects) {
             //NoteObject.GetComponent<MeshRenderer>().material = invisible_material;
-            NoteObject.GetComponent<MeshRenderer>().enabled = true;
+            NoteObject.GetComponent<MeshRenderer>().enabled = false;
         }
         
     }

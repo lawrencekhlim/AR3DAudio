@@ -30,6 +30,7 @@ public class ButtonManager : MonoBehaviour
     public void Awake()
     {
         //Panel.SetActive(false);
+        GameObject.FindGameObjectWithTag("Button_Toggle_Tag").SetActive(false);
     }
 
     public void togglePanel()
