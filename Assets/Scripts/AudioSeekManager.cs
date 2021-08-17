@@ -435,7 +435,7 @@ public class AudioSeekManager : MonoBehaviour
             }
 
             // TEST TEST TEST. testing code snippet from ARTapToPlaceObjects for repositioning newly spawned objects
-            foreach (GameObject instrumentObject in instrumentObjects)
+            /*foreach (GameObject instrumentObject in instrumentObjects)
             {
                 Camera m_MainCamera = Camera.main;
                 Vector2 initial_direction = new Vector2(0, 1);
@@ -446,7 +446,7 @@ public class AudioSeekManager : MonoBehaviour
                 Debug.Log(camera_direction);
                 Debug.Log(Vector2.Dot(initial_direction, camera_direction));
                 Debug.Log(rotation_angle);
-            }
+            }*/
         }
 
 
