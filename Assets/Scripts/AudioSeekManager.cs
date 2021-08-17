@@ -433,6 +433,20 @@ public class AudioSeekManager : MonoBehaviour
                 audioSource_right.Stop();
                 currentTime = (audioSource_left.time + audioSource_right.time) / 2.0f;
             }
+
+            // TEST TEST TEST. testing code snippet from ARTapToPlaceObjects for repositioning newly spawned objects
+            foreach (GameObject instrumentObject in instrumentObjects)
+            {
+                Camera m_MainCamera = Camera.main;
+                Vector2 initial_direction = new Vector2(0, 1);
+                Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
+                float rotation_angle = Mathf.Acos(Vector2.Dot(initial_direction, camera_direction)) * 180 / Mathf.PI;
+                instrumentObject.transform.eulerAngles = new Vector3(0.0f, 0.0f + rotation_angle, 0.0f);
+                Debug.Log(initial_direction);
+                Debug.Log(camera_direction);
+                Debug.Log(Vector2.Dot(initial_direction, camera_direction));
+                Debug.Log(rotation_angle);
+            }
         }
 
 
