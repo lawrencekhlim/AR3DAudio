@@ -5,9 +5,13 @@ using UnityEngine;
 public class DropdownManager : MonoBehaviour
 {
     //public string song = "(Look Out) She's America - Otis McDonald";
-    public string song = "Gemini Robot - Bird Creek";
+    public string song;
     //public AudioSeekManager audioSeekManager;
 
+    void Awake()
+    {
+        song = "(Look Out) She's America - Otis McDonald";
+    }
 
     public void Changed(int val)
     {
@@ -70,5 +74,10 @@ public class DropdownManager : MonoBehaviour
 
         AudioSeekManager.Instance.setTracks (song);
 
+        // TODO: change it so changing songs will pause and update the pause button too
+        /*EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text = "Play";
+        play_pause_button_state = 1;
+        AudioSeekManager.Instance.setPlay(false);
+        AudioSeekManager.Instance.pauseSong();*/
     }
 }

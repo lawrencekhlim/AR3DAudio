@@ -42,6 +42,15 @@ public class ARTapToPlaceObject : MonoBehaviour
             {"Misc", 0.025f},
         };
 
+    public Dictionary<string, float> initialYRotationAngle =
+        new Dictionary<string, float>(){
+            {"Piano", 0.0f},
+            {"Drum", 0.0f},
+            {"Bass", 0.0f},
+            {"Vocal", 0.0f},
+            {"Misc", 0.0f},
+        };
+
     /*public Dictionary <string, string> instrument_names = 
         new Dictionary <string, string>(){ 
             {"Instrument1", "Bass"}, 
@@ -222,10 +231,14 @@ public class ARTapToPlaceObject : MonoBehaviour
             if (spawnedObjects[instrument] == null)
             {
                 spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
-                //string tag;
-                //Debug.Log(instrument);
-                //Debug.Log(dropdownManagerScript.song);  
-                newObjectAdded = true;          
+                newObjectAdded = true;
+
+                // Reposition Spawned Object so it faces away
+                Vector2 initial_direction = new Vector2(0, 1);
+                Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
+                float rotation_angle = Mathf.Acos(Vector2.Dot(initial_direction, camera_direction)) * 180 / Mathf.PI; ;
+                spawnedObjects[instrument].transform.eulerAngles = new Vector3(0.0f, initialYRotationAngle[instrument] + rotation_angle, 0.0f);
+
             }
             else
             {

@@ -12,7 +12,7 @@ public class AudioSeekManager : MonoBehaviour
 
     public bool currentlyPlaying = false;
     public float currentTime = 0;
-    public string [] instrument_names2 = { "Bass", "Piano", "Drum", "Vocal", "Misc" };
+    public string[] instrument_names2 = { "Bass", "Piano", "Drum", "Vocal", "Misc" };
 
 
     private float interval_tracker = 0.0f;       // tracks how long current interval has been
@@ -30,7 +30,7 @@ public class AudioSeekManager : MonoBehaviour
 
     // Static singleton property
     public static AudioSeekManager Instance { get; private set; }
-     
+
     void Awake()
     {
 
@@ -41,15 +41,15 @@ public class AudioSeekManager : MonoBehaviour
         between_instrument_time_slider = GameObject.FindGameObjectsWithTag("Slider_Between_Instrument_Time")[0].GetComponent<Slider>();
 
         // First we check if there are any other instances conflicting
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             // If that is the case, we destroy other instances
             Destroy(gameObject);
         }
- 
+
         // Here we save our singleton instance
         Instance = this;
- 
+
         // Furthermore we make sure that we don't destroy between scenes (this is optional)
         DontDestroyOnLoad(gameObject);
     }
@@ -61,8 +61,9 @@ public class AudioSeekManager : MonoBehaviour
         //Debug.Log ("Updated is called in AudioSeekManager.");
         //Debug.Log (currentlyPlaying);
         //Debug.Log (placedInstrument());
-       
-        if (currentlyPlaying && placedInstrument()) { // currently playing audio, update currentTime
+
+        if (currentlyPlaying && placedInstrument())
+        { // currently playing audio, update currentTime
             currentTime += Time.deltaTime; // Better way is to set currentTime to one of the instrumenttracks.time.
             //Debug.Log("The current time is updated");
             interval_tracker += Time.deltaTime;
@@ -76,19 +77,33 @@ public class AudioSeekManager : MonoBehaviour
         }
     }
 
-    public void setPlay (bool play) {
+    public void toggleGreenNote(bool isVisible)
+    {
+        GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
+        foreach (GameObject NoteObject in NoteObjects)
+        {
+            NoteObject.GetComponent<MeshRenderer>().enabled = isVisible;
+        }
+    }
+
+    public void setPlay(bool play)
+    {
         currentlyPlaying = play;
     }
 
-    public void setSongPosition (float newTime) {
+    public void setSongPosition(float newTime)
+    {
         currentTime = newTime;
     }
 
 
-    public bool placedInstrument() {
-        foreach (string instr in instrument_names2) {
+    public bool placedInstrument()
+    {
+        foreach (string instr in instrument_names2)
+        {
             Debug.Log(instr);
-            if (GameObject.FindGameObjectsWithTag(instr).Length != 0) {
+            if (GameObject.FindGameObjectsWithTag(instr).Length != 0)
+            {
                 //Debug.Log ("A instrument is placed.");
                 return true;
             }
@@ -98,16 +113,17 @@ public class AudioSeekManager : MonoBehaviour
 
     private float calculate_delay(Vector3 camera_pos, Vector3 instrument_pos, Vector3 camera_dir)
     {
-        
+
         Vector3 position_dir = instrument_pos - camera_pos;
 
         Vector2 position_vec2 = new Vector2(position_dir.x, position_dir.z);
-        if (position_vec2.magnitude == 0) {
+        if (position_vec2.magnitude == 0)
+        {
             return 0.0f;            // if position vector is 0, then they are on same location so no delay
         }
         position_vec2 = position_vec2.normalized;
         Vector2 camera_vec2 = new Vector2(camera_dir.x, camera_dir.z).normalized;
-       
+
         // Calculate delay from that online equation
         float degree = Mathf.Acos(Vector2.Dot(position_vec2, camera_vec2));
         float radius = 0.0875f;     // 8.75cm
@@ -120,36 +136,39 @@ public class AudioSeekManager : MonoBehaviour
         {
             sub_dot = 1.0f;
         }
-        float direction = sub_dot / Mathf.Abs(sub_dot); 
+        float direction = sub_dot / Mathf.Abs(sub_dot);
 
         return delay * direction;
     }
 
-    private float[] calculate_level_difference (Vector3 camera_pos, Vector3 instrument_pos, Vector3 camera_dir) {
+    private float[] calculate_level_difference(Vector3 camera_pos, Vector3 instrument_pos, Vector3 camera_dir)
+    {
         Vector3 position_vec1 = instrument_pos - camera_pos;
         Vector2 position_vec = new Vector2(position_vec1.x, position_vec1.z);
         Vector2 camera_vec = new Vector2(camera_dir.x, camera_dir.z);
-        
+
         float min_distance = 1;
         float max_distance = 500;
         //Vector2 position_vec2 = new Vector2 
         Debug.Log("Position Difference Magnitude: " + position_vec.ToString());
-        
-        if (position_vec.magnitude == 0) {
-            return new float[2] {1.0f,1.0f};            // if position vector is 0, then they are on same location so no delay
+
+        if (position_vec.magnitude == 0)
+        {
+            return new float[2] { 1.0f, 1.0f };            // if position vector is 0, then they are on same location so no delay
         }
-        if (position_vec.magnitude < 1) {
+        if (position_vec.magnitude < 1)
+        {
             position_vec = position_vec.normalized; // Gives us a unit vector in that direction
         }
         camera_vec = camera_vec.normalized;
 
-        float angle = Mathf.Acos (Vector3.Dot(position_vec, camera_vec) / (position_vec.magnitude * camera_vec.magnitude));
-   
-        
+        float angle = Mathf.Acos(Vector3.Dot(position_vec, camera_vec) / (position_vec.magnitude * camera_vec.magnitude));
+
+
         float distance = position_vec.magnitude;
         float volume = 1 / Mathf.Pow(distance, distance_difference_slider.value);
         float PI = (float)Math.PI;
-        float theta2 = Mathf.Abs( PI / 2.0f - angle);
+        float theta2 = Mathf.Abs(PI / 2.0f - angle);
         float closer_ear = (PI - theta2) / PI;
         float further_ear = theta2 / PI;
 
@@ -175,7 +194,8 @@ public class AudioSeekManager : MonoBehaviour
         if (direction < 0)
         {
             result[1] = volume * further_ear_offset;
-        } else
+        }
+        else
         {
             result[0] = volume * further_ear_offset;
         }
@@ -205,21 +225,17 @@ public class AudioSeekManager : MonoBehaviour
                 }
             }
 
-            //  make all objects with playing_note tag have a visible material
-            GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
-            foreach (GameObject NoteObject in NoteObjects)
-            {
-                //NoteObject.GetComponent<MeshRenderer>().material = note_material;
-                NoteObject.GetComponent<MeshRenderer>().enabled = true;
-            }
+
+            toggleGreenNote(true);
         }
     }
 
-    public void setTracks (string song) {
+    public void setTracks(string song)
+    {
         var clip = Resources.Load(song) as AudioClip;
 
         string[] instrument_types = new string[] { "bass", "piano", "drums", "vocals", "other" }; // For the filenames of the left/right audio sources
-        for(int i=0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             string instr = instrument_names2[i];
             string instrument_type = instrument_types[i];
@@ -244,7 +260,7 @@ public class AudioSeekManager : MonoBehaviour
 
                 if (audio_left.clip == null)
                 {
-                    Debug.Log("Audio" + (i+1).ToString() + "_left was null");
+                    Debug.Log("Audio" + (i + 1).ToString() + "_left was null");
                     audio_left.clip = clip;
                 }
                 if (audio_right.clip == null)
@@ -256,8 +272,10 @@ public class AudioSeekManager : MonoBehaviour
         }
     }
 
-    public void updateSongDelay() {
-        if (currentlyPlaying) {
+    public void updateSongDelay()
+    {
+        if (currentlyPlaying)
+        {
 
             frame_counter += 1;
 
@@ -280,16 +298,17 @@ public class AudioSeekManager : MonoBehaviour
                         closest_instrument = instrumentObject;
                         closest_distance = instrument_distance;
                     }
-                    
+
                 }
             }
 
-            foreach (string instr in instrument_names2) {
+            foreach (string instr in instrument_names2)
+            {
                 GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
                 GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
                 GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
 
-                foreach (GameObject instrumentObject in soundObjects) 
+                foreach (GameObject instrumentObject in soundObjects)
                 {
                     AudioSource[] audioSources = instrumentObject.GetComponents<AudioSource>();
                     Vector3 instrument_position = instrumentObject.transform.position;
@@ -310,7 +329,7 @@ public class AudioSeekManager : MonoBehaviour
                     //Debug.Log (track_delay);
 
                     float echoDampen = echo_dampening_slider.value;
-                    float [] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
+                    float[] volume = calculate_level_difference(camera_position, instrument_position, camera_direction);
 
                     if (instrumentObject.tag == instr)
                     {
@@ -325,7 +344,7 @@ public class AudioSeekManager : MonoBehaviour
                     // Closest's instruments time
                     AudioSource[] closest_audiosource = closest_instrument.GetComponents<AudioSource>();
                     float closest_instrument_time = (closest_audiosource[0].time + closest_audiosource[1].time) / 2.0f;
-                    
+
 
                     // Distance between current instrument and closest instrument.
                     float distance_difference = Mathf.Abs(closest_distance - Vector3.Distance(instrumentObject.transform.position, camera_position));
@@ -397,13 +416,15 @@ public class AudioSeekManager : MonoBehaviour
         }
     }
 
-    public void pauseSong() {
-        foreach (string instr in instrument_names2) {
+    public void pauseSong()
+    {
+        foreach (string instr in instrument_names2)
+        {
             GameObject[] instrumentObjects = GameObject.FindGameObjectsWithTag(instr);
             GameObject[] echoObjects = GameObject.FindGameObjectsWithTag(instr + "_echo");
             GameObject[] soundObjects = instrumentObjects.Concat(echoObjects).ToArray();
 
-            foreach (GameObject instrumentObject in soundObjects) 
+            foreach (GameObject instrumentObject in soundObjects)
             {
                 AudioSource audioSource_left = instrumentObject.GetComponents<AudioSource>()[0];
                 AudioSource audioSource_right = instrumentObject.GetComponents<AudioSource>()[1];
@@ -414,13 +435,9 @@ public class AudioSeekManager : MonoBehaviour
             }
         }
 
-        // make all objects with playing_note tag have invisible material
-        GameObject[] NoteObjects = GameObject.FindGameObjectsWithTag("Playing_Note");
-        foreach (GameObject NoteObject in NoteObjects) {
-            //NoteObject.GetComponent<MeshRenderer>().material = invisible_material;
-            NoteObject.GetComponent<MeshRenderer>().enabled = false;
-        }
-        
+
+        toggleGreenNote(false);
+
     }
 
 
