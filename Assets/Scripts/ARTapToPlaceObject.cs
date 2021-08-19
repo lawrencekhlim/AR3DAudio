@@ -237,12 +237,19 @@ public class ARTapToPlaceObject : MonoBehaviour
                 Vector2 initial_direction = new Vector2(0, 1);
                 Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
                 float rotation_angle = Mathf.Acos(Vector2.Dot(initial_direction, camera_direction)) * 180 / Mathf.PI; ;
+                if (m_MainCamera.transform.forward.x < 0)
+                {
+                    rotation_angle = 360 - rotation_angle;
+                }
                 spawnedObjects[instrument].transform.eulerAngles = new Vector3(0.0f, initialYRotationAngle[instrument] + rotation_angle, 0.0f);
             }
             else
             {
                 spawnedObjects[instrument].transform.position = hitPose.position;
             }
+
+            //  make all objects with playing_note tag have a visible/invisible based on whether it is currently playing
+            AudioSeekManager.Instance.toggleGreenNote(AudioSeekManager.Instance.currentlyPlaying);
 
             UnityEngine.XR.ARFoundation.ARPlaneManager planeManager = GetComponent<UnityEngine.XR.ARFoundation.ARPlaneManager>();
             foreach (var plane in planeManager.trackables)

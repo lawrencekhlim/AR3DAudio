@@ -73,6 +73,7 @@ public class DropdownManager : MonoBehaviour
         }
 
         AudioSeekManager.Instance.setTracks (song);
+        AudioSeekManager.Instance.playSong();
 
         // TODO: change it so changing songs will pause and update the pause button too
         /*EventSystem.current.currentSelectedGameObject.GetComponentInChildren<Text>().text = "Play";

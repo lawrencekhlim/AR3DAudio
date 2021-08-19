@@ -441,6 +441,10 @@ public class AudioSeekManager : MonoBehaviour
                 Vector2 initial_direction = new Vector2(0, 1);
                 Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
                 float rotation_angle = Mathf.Acos(Vector2.Dot(initial_direction, camera_direction)) * 180 / Mathf.PI;
+                if (m_MainCamera.transform.forward.x < 0)
+                {
+                    rotation_angle = 360 - rotation_angle;
+                }
                 instrumentObject.transform.eulerAngles = new Vector3(0.0f, 0.0f + rotation_angle, 0.0f);
                 Debug.Log(initial_direction);
                 Debug.Log(camera_direction);
