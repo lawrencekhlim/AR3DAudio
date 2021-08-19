@@ -44,9 +44,9 @@ public class ARTapToPlaceObject : MonoBehaviour
 
     public Dictionary<string, float> initialYRotationAngle =
         new Dictionary<string, float>(){
-            {"Piano", 0.0f},
+            {"Piano", 180.0f},
             {"Drum", 0.0f},
-            {"Bass", 0.0f},
+            {"Bass", 90.0f},
             {"Vocal", 0.0f},
             {"Misc", 0.0f},
         };
@@ -233,6 +233,7 @@ public class ARTapToPlaceObject : MonoBehaviour
                 spawnedObjects[instrument] = Instantiate(getObjectToInstantiate(instrument), hitPose.position, hitPose.rotation);
                 newObjectAdded = true;
 
+                /*
                 // Reposition Spawned Object so it faces away
                 Vector2 initial_direction = new Vector2(0, 1);
                 Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
@@ -242,11 +243,22 @@ public class ARTapToPlaceObject : MonoBehaviour
                     rotation_angle = 360 - rotation_angle;
                 }
                 spawnedObjects[instrument].transform.eulerAngles = new Vector3(0.0f, initialYRotationAngle[instrument] + rotation_angle, 0.0f);
+                */
             }
             else
             {
                 spawnedObjects[instrument].transform.position = hitPose.position;
             }
+
+            // Reposition Spawned Object so it faces away
+            Vector2 initial_direction = new Vector2(0, 1);
+            Vector2 camera_direction = new Vector2(m_MainCamera.transform.forward.x, m_MainCamera.transform.forward.z);
+            float rotation_angle = (Mathf.Acos(Vector2.Dot(initial_direction, camera_direction)) * 180 / Mathf.PI) % 360;
+            if (m_MainCamera.transform.forward.x < 0)
+            {
+                rotation_angle = 360 - rotation_angle;
+            }
+            spawnedObjects[instrument].transform.eulerAngles = new Vector3(0.0f, initialYRotationAngle[instrument] + rotation_angle, 0.0f);
 
             //  make all objects with playing_note tag have a visible/invisible based on whether it is currently playing
             AudioSeekManager.Instance.toggleGreenNote(AudioSeekManager.Instance.currentlyPlaying);
